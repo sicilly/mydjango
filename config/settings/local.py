@@ -11,7 +11,7 @@ SECRET_KEY = env(
     default="A6hdTXN18HOqjRbxG5TnPJF9dJStNcrEaW0VAUQXEwgujuxJOQJdQYAzXj10Zpa8",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -23,12 +23,16 @@ CACHES = {
     }
 }
 
+TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG
+
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
 )
+EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="localhost")
+EMAIL_PORT = env("DJANGO_EMAIL_PORT",default=1025)
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
