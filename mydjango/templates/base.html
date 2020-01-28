@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}mydjango{% endblock title %}</title>
+    <title>{% block title %}Wanshan{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -15,20 +15,16 @@
 
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
-    {% block css %}
-    
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-
     <!-- Your stuff: Third-party CSS libraries go here -->
     {% compress css %}
-    <!-- This file stores project-specific CSS -->
-    
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+    <link href="{% static 'bootstrap-4.3.1-dist/css/bootstrap.css' %}" rel="stylesheet">
+      <!-- This file stores project-specific CSS -->
+      <link href="{% static 'css/project.css' %}" rel="stylesheet">
+      {% block css %}{% endblock %}
+
     {% endcompress %}
-    {% endblock %}
+
+
 
   </head>
 
@@ -93,22 +89,16 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    {% block javascript %}
-      
+          <!-- place project specific Javascript in this file -->
+    {% compress js %}
       <!-- Bootstrap JS and its dependencies-->
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-      <!-- Your stuff: Third-party javascript libraries go here -->
-      
-
-      <!-- place project specific Javascript in this file -->
-      {% compress js %}
+      <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'js/jquery-ui.min.js' %}"></script>
       <script src="{% static 'js/project.js' %}"></script>
-      {% endcompress %}
-
-    {% endblock javascript %}
+      {% block javascript %}
+      {% endblock javascript %}
+    {% endcompress %}
   </body>
 </html>
- 
+
