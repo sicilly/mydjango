@@ -23,7 +23,9 @@ user_detail_view = UserDetailView.as_view()
 class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     model = User  # 模型
-    fields = ["name"]  # 字段
+    fields = ["nickname", "job", "introduction", "avatar", "address", "birthday",
+              "personal_url", "weibo", "zhihu", "github", "linkedin"]  # 可更新的字段
+    template_name = 'users/user_form.html'
 
     def get_success_url(self):  # 更新成功后跳转
         return reverse("users:detail", kwargs={"username": self.request.user.username})

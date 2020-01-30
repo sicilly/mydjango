@@ -5,6 +5,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="blog.models.User" />
+          <option value="users.models.timezone" />
         </list>
       </option>
     </inspection_tool>
