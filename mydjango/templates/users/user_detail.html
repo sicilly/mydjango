@@ -1,36 +1,67 @@
 {% extends "base.html" %}
-{% load static %}
+{#{% load static thumbnail %}#}
 
-{% block title %}User: {{ object.username }}{% endblock %}
+{% block title %}{{ user.username }} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
+    <div class="container">
 
-  <div class="row">
-    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-md-2">
+{#                {% thumbnail user.avatar "x180" as im %}#}
+                    <img src="{{ MEDIA_URL }}{{ user.avatar }}" style="width: 180px; height: 180px;" alt="用户头像" class="user-image">
+{#                {% empty %}#}
+{#                    <img src="{% static 'images/user.png' %}" height="180px" alt="没有头像"/>#}
+{#                {% endthumbnail %}#}
+{#                <img src="{{ MEDIA_URL }}{{ user.avatar }}" style="width: 180px;height: 180px"/>#}
+            </div>
+            <div class="col-md-8">
+                <div class="card" style="width: 100%;height: 180px">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ user.username }}
+                            {% if user.nickname %}
+                                <small class="card-subtitle mb-2 text-muted">【{{ user.nickname }}】</small>
+                            {% endif %}
+                            {% if user.birthday %}
+                                <small class="card-subtitle mb-2 text-muted">{{ user.birthday }}</small>
+                            {% endif %}
+                        </h3>
+                        {% if user.introduction %}
+                            <p class="card-text"><b>简介:</b> {{ user.introduction|safe|truncatechars:80 }}</p>
+                        {% endif %}
+                        {% if user.personal_url %}
+                            <a href="{{ user.personal_url }}" style="font-size: 2em" title="个人网站"><i
+                                class="fa fa-link"></i> </a>
+                        {% endif %}
+                        {% if user.weibo %}
+                            <a href="{{ user.weibo }}" style="font-size: 2em" title="微博"><i class="fa fa-weibo"></i>
+                            </a>
+                        {% endif %}
+                        {% if user.zhihu %}
+                            <a href="{{ user.zhihu }}" style="font-size: 2em" title="知乎"><i class="fa fa-quora"></i>
+                            </a>
+                        {% endif %}
+                        {% if user.github %}
+                            <a href="{{ user.github }}" style="font-size: 2em" title="Github"><i
+                                class="fa fa-github"></i> </a>
+                        {% endif %}
+                        {% if user.linkedin %}
+                            <a href="{{ user.linkedin }}" style="font-size: 2em" title="LinkedIn"><i
+                                class="fa fa-linkedin"></i> </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                {% if user.username == request.user.username %}
+                    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">更新信息</a>
+                    <hr/>
+                    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">添加邮箱</a>
+                {% endif %}
+            </div>
+        </div>
 
-      <h2>{{ object.username }}</h2>
-      {% if object.name %}
-        <p>{{ object.name }}</p>
-      {% endif %}
+
     </div>
-  </div>
-
-{% if object == request.user %}
-<!-- Action buttons -->
-<div class="row">
-
-  <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-    <!-- Your Stuff: Custom user template urls -->
-  </div>
-
-</div>
-<!-- End Action buttons -->
-{% endif %}
-
-
-</div>
 {% endblock content %}
 

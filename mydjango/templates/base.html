@@ -63,6 +63,7 @@
             {% if request.user.is_authenticated %}
 
               <li class="nav-item" id="users">
+                {# username 是一个占位符 #}
                 <a class="nav-link" href="{% url 'users:detail' request.user.username %}">{% trans "个人中心" %}</a>
               </li>
               <li class="nav-item" id="logout">

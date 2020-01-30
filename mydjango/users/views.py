@@ -11,9 +11,11 @@ User = get_user_model()
 # 详情视图
 class UserDetailView(LoginRequiredMixin, DetailView):
 
-    model = User
-    slug_field = "username"
-    slug_url_kwarg = "username"
+    model = User  # 指定用户模型
+    slug_field = "username"  # 必须是唯一的
+    slug_url_kwarg = "username"  # 和urls中的占位符一致，如果不写默认为slug
+    # pk_url_kwarg = 'pk' # 也可以用主键来查询，默认是pk
+    template_name = 'users/user_detail.html'
 
 
 user_detail_view = UserDetailView.as_view()
@@ -28,6 +30,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'users/user_form.html'
 
     def get_success_url(self):  # 更新成功后跳转
+        # kwargs里面的键"username"也是占位符
         return reverse("users:detail", kwargs={"username": self.request.user.username})
 
     def get_object(self):  # 获取当前登录的对象
@@ -49,6 +52,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self):  # 获取重定向url
+        # kwargs里面的键"username"也是占位符
         return reverse("users:detail", kwargs={"username": self.request.user.username})
 
 
