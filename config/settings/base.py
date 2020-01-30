@@ -96,7 +96,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"  # 自定义用户模型
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "users:redirect"  # 用户登录以后跳转到哪个页面
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
@@ -216,9 +216,10 @@ EMAIL_BACKEND = env(
 EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="localhost")
 EMAIL_PORT = env("DJANGO_EMAIL_PORT", default=1025)
 EMAIL_USE_TSL = env('DJANGO_EMAIL_USE_TSL', default=False)
-EMAIL_HOST_USER = env('DJANGO_EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('DJANGO_EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
+# console发送邮箱 用不到以下三行
+# EMAIL_HOST_USER = env('DJANGO_EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('DJANGO_EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
 
 # ADMIN
 # ------------------------------------------------------------------------------

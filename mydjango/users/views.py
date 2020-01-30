@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 User = get_user_model()
 
 
+# 详情视图
 class UserDetailView(LoginRequiredMixin, DetailView):
 
     model = User
@@ -18,15 +19,16 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 user_detail_view = UserDetailView.as_view()
 
 
+# 更新视图
 class UserUpdateView(LoginRequiredMixin, UpdateView):
 
-    model = User
-    fields = ["name"]
+    model = User  # 模型
+    fields = ["name"]  # 字段
 
-    def get_success_url(self):
+    def get_success_url(self):  # 更新成功后跳转
         return reverse("users:detail", kwargs={"username": self.request.user.username})
 
-    def get_object(self):
+    def get_object(self):  # 获取当前登录的对象
         return User.objects.get(username=self.request.user.username)
 
     def form_valid(self, form):
@@ -39,11 +41,12 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 user_update_view = UserUpdateView.as_view()
 
 
+# 重定向视图
 class UserRedirectView(LoginRequiredMixin, RedirectView):
 
     permanent = False
 
-    def get_redirect_url(self):
+    def get_redirect_url(self):  # 获取重定向url
         return reverse("users:detail", kwargs={"username": self.request.user.username})
 
 
