@@ -65,7 +65,7 @@ class TestUserUpdateView(BaseUserTestCase):
         super(TestUserUpdateView, self).setUp()
         self.view = UserUpdateView()  # 调用构造函数产生视图
         request = self.factory.get('/fake-url')  # 发起一个get请求
-        request.user = self.user
+        request.user = self.user  # 要登录
         self.view.request = request
 
     def test_get_success_url(self):
