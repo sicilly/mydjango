@@ -1,4 +1,5 @@
-{% load static i18n compress%}<!DOCTYPE html>
+{% load static i18n compress thumbnail %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -64,7 +65,13 @@
 
               <li class="nav-item" id="users">
                 {# username 是一个占位符 #}
-                <a class="nav-link" href="{% url 'users:detail' request.user.username %}">{% trans "个人中心" %}</a>
+                <a class="nav-link" href="{% url 'users:detail' request.user.username %}">
+                  {% thumbnail request.user.avatar "x25" as im %}
+                    <img src="{{ im.url }}" style="border-radius: 50%;" alt="用户头像" class="user-image"/>
+                  {% empty %}
+                    <img src="{% static 'images/user.png' %}" height="25px" alt="没有头像">
+                  {% endthumbnail %}
+                </a>
               </li>
               <li class="nav-item" id="logout">
                 <a id="sign-up-link" class="nav-link" href="{% url 'account_logout' %}">{% trans "退出" %}</a>
