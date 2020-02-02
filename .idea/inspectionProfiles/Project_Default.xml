@@ -6,6 +6,7 @@
         <list>
           <option value="blog.models.User" />
           <option value="users.models.timezone" />
+          <option value="utils.ajax_required" />
         </list>
       </option>
     </inspection_tool>

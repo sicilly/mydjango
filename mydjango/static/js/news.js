@@ -4,10 +4,14 @@ $(function () {
     });
 
     $("#postNews").click(function () {
-        if(currentUser===""){   //如果用户没有登陆
+        if ($("#newsInput").val() === '') { //如果没有输入动态内容
+            alert("请输入新闻动态的内容！");
+            return;
+        }
+        if(currentUser===""){               //如果用户没有登陆
             alert("请登录后再发布新闻动态！")
             return;
-        }else{                  //如果用户已登录
+        }else{                               //如果用户已登录
             // Ajax call after pushing button, to register a News object.
             $.ajax({
                 url: '/news/post-news/',

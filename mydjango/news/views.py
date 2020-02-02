@@ -1,14 +1,14 @@
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 # from django.urls import reverse, reverse_lazy
-# from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DeleteView
 
 from mydjango.news.models import News
-# from mydjango.utils import ajax_required, AuthorRequiredMixin
+from mydjango.utils import ajax_required
 
 
 class NewsListView(ListView):
@@ -22,11 +22,10 @@ class NewsListView(ListView):
     def get_queryset(self, *kwargs):
         return News.objects.filter(reply=False).all()
 
-# @login_required
-# @ajax_required
-# @require_http_methods(["POST"])
 
-
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
 def post_news(request):
     """发送动态，AJAX POST请求"""
     newsContent = request.POST['news_content'].strip()
