@@ -1,8 +1,8 @@
 # from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
-# from django.shortcuts import render
-# from django.template.loader import render_to_string
+from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
 # from django.urls import reverse, reverse_lazy
 # from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DeleteView
@@ -21,20 +21,21 @@ class NewsListView(ListView):
 
     def get_queryset(self, *kwargs):
         return News.objects.filter(reply=False).all()
-#
-#
+
 # @login_required
 # @ajax_required
 # @require_http_methods(["POST"])
-# def post_news(request):
-#     """发送动态，AJAX POST请求"""
-#     newsContent = request.POST['news_content'].strip()
-#     if newsContent:
-#         news = News.objects.create(user=request.user, content=newsContent)
-#         html = render_to_string('news/news_single.html', {'news':news, 'request':request})
-#         return HttpResponse(html)
-#     else:
-#         return HttpResponseBadRequest("内容不能为空！")
+
+
+def post_news(request):
+    """发送动态，AJAX POST请求"""
+    newsContent = request.POST['news_content'].strip()
+    if newsContent:
+        news = News.objects.create(user=request.user, content=newsContent)
+        html = render_to_string('news/news_single.html', {'news': news, 'request': request})
+        return HttpResponse(html)
+    else:
+        return HttpResponseBadRequest("内容不能为空！")
 #
 #
 # class NewsDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):

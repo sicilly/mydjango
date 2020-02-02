@@ -10,13 +10,12 @@
 {% endblock %}
 
 {% block content %}
-{#    <div class="my-4"></div>#}
+    <div class="my-4"></div>
     <div class="row">
         <div class="col-md-8">
             <ul class="stream">
                 {% for news_item in news_list %}
                     {% include 'news/news_single.html' with news=news_item %}
-                  <hr/>
                 {% endfor %}
             </ul>
       </div>
