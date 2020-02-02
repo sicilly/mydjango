@@ -10,17 +10,55 @@
 {% endblock %}
 
 {% block content %}
-    <div class="my-4"></div>
-    <div class="row">
-        <div class="col-md-8">
+{#    <div class="my-4"></div>#}
+{#    <div class="row">#}
+{#        <div class="col-md-8">#}
             <ul class="stream">
                 {% for news in news_list %}
 {#                    {% include 'news/news_single.html' with news=news_item %}#}
-                  {{ news.content }}
+                    <li class="news-item" style="list-style: none">
+                    <div class="media">
+                      {% thumbnail news.user.avatar "x50" as im %}
+                        <img src="{{ im.url }}" style="border-radius: 20%;" alt="用户头像" class="align-self-start mr-3">
+        {% empty %}
+                        <img src="{% static 'images/user.png' %}" style="border-radius: 20%; height: 50px" alt="没有头像"
+                 class="align-self-start mr-3"/>
+                    {% endthumbnail %}
+                      <div class="media-body">
+                         {% if request.user.username == news.user.username %}
+                    <a href="#">
+                        <i class="fa fa-times pull-right" title="点击删除这条新闻动态"></i></a>
+                {% endif %}
+                      <p>{{ news.content }}</p>
+                      <div class="interaction">
+                        <a href="#" class="like pull-right"
+                   title="{% for item in news.get_likers %}{{ item.get_profile_name }}&#10;{% endfor %}">
+                           {% if request.user in news.get_likers %}
+                        <i class="heart fa fa-heart" aria-hidden="true"></i>
+                          {% else %}
+                              <i class="heart fa fa-heart-o" aria-hidden="true"></i>
+                          {% endif %}
+                          <span class="like-count">{{ news.likers_count }}</span>
+                        </a>
+                                      <a href="#" class="reply pull-right mr-3"
+                   data-toggle="modal" data-target="#replyListModal">
+                    <i class="fa fa-comment-o" aria-hidden="true"></i>
+                    <span class="reply-count">{{ news.replies_count }}</span>
+                </a>
+                <button type="button" class="btn btn-sm btn-light pull-right mr-3" data-toggle="modal"
+                        data-target="#replyFormModal"
+                        data-who="{{ news.user.username }}"
+                        data-newsid="{{ news.pk }}">回复
+                </button>
+                       <span class="timestamp pull-left">{{ news.updated_at}}</span>
+                      </div>
+                    </div>
+                    </div>
+                    </li>
                   <hr/>
                 {% endfor %}
             </ul>
-        </div>
+{#        </div>#}
 {#        <div class="col-md-4">#}
 {#            <div class="card" style="width: 18rem;">#}
 {#                <!--发布新的新闻动态的弹出对话框-->#}
