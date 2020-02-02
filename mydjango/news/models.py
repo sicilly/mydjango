@@ -22,7 +22,7 @@ class News(models.Model):
     class Meta:
         verbose_name = '新闻'
         verbose_name_plural = verbose_name
-        ordering = ("-updated_at", "-created_at")
+        ordering = ("-updated_at", "-created_at")  # 排序方式
 
     def __str__(self):
         return self.content

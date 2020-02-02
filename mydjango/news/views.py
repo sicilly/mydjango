@@ -5,22 +5,22 @@
 # from django.template.loader import render_to_string
 # from django.urls import reverse, reverse_lazy
 # from django.views.decorators.http import require_http_methods
-# from django.views.generic import ListView, DeleteView
-#
-# from mydjango.news.models import News
+from django.views.generic import ListView, DeleteView
+
+from mydjango.news.models import News
 # from mydjango.utils import ajax_required, AuthorRequiredMixin
-#
-#
-# class NewsListView(ListView):
-#     """新闻列表页"""
-#     # model = News
-#     # queryset = News.objects.filter(reply=False).all()
-#     paginate_by = 10
-#     template_name = 'news/news_list.html'
-#     context_object_name = 'news_list'
-#
-#     def get_queryset(self, *kwargs):
-#         return News.objects.filter(reply=False).all()
+
+
+class NewsListView(ListView):
+    """新闻列表页"""
+    model = News
+    queryset = News.objects.filter(reply=False).all()  # 过滤出新闻（也可重写get_queryset函数)
+    paginate_by = 10
+    template_name = 'news/news_list.html'
+    context_object_name = 'news_list'
+
+    def get_queryset(self, *kwargs):
+        return News.objects.filter(reply=False).all()
 #
 #
 # @login_required
