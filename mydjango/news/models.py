@@ -26,3 +26,49 @@ class News(models.Model):
 
     def __str__(self):
         return self.content
+
+    def switch_like(self, user):
+        """ 点赞或者取消点赞 """
+        if user in self.likers.all():
+            self.likers.remove(user)  # 用户在已经在self.likers的集合里，就要把user移除
+        else:
+            self.likers.add(user)  # 如果用户没有点赞，那么就把他添加进来
+
+    def get_parent(self):
+        """返回自关联中的上级记录或者本身"""
+        if self.parent:  # 如果是评论
+            return self.parent  # 返回新闻
+        else:            # 如果是新闻
+            return self  # 返回新闻
+
+    def get_children(self):
+        """获取当前记录的所有子记录"""
+        parent = self.get_parent()
+        return parent.children.all()
+
+    def reply_this(self, user, text):
+        """
+        回复首页的动态
+        :param user: 登录的用户
+        :param text: 回复的内容
+        :return: None
+        """
+        parent = self.get_parent()
+        News.objects.create(
+            user=user,
+            content=text,
+            reply=True,
+            parent=parent
+        )
+
+    def likers_count(self):
+        """点赞数"""
+        return self.likers.count()
+
+    def get_likers(self):
+        """所有点赞用户"""
+        return self.likers.all()
+
+    def repies_count(self):
+        """评论数量"""
+        return self.get_children().count()
