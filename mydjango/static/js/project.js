@@ -19,7 +19,7 @@ function getCookie(name) {
     return null;
 }
 
-// function csrfSafeMethod(method) {
-//     // These HTTP methods do not require CSRF protection
-//     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-// }
+function csrfSafeMethod(method) {
+    // These HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}

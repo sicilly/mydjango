@@ -2,6 +2,15 @@ $(function () {
     //从 cookie 里面获取 csrftoken
     let csrftoken = getCookie('csrftoken');
 
+    // 这个设置会让所有Ajax POST/DELETE请求在其请求头中都携带 X-CSRFToken 信息
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
     $('#newsFormModal').on('shown.bs.modal',function () {
         $('#newsInput').trigger('focus')    // 自动聚焦
     });

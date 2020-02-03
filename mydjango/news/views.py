@@ -44,19 +44,20 @@ class NewsDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     template_name = 'news/news_confirm_delete.html'
     success_url = reverse_lazy('news:list')  # 在项目的URLConf未加载前使用
 
-# @login_required
-# @ajax_required
-# @require_http_methods(["POST"])
-# def like(request):
-#     """点赞，响应AJAX POST请求"""
-#     news_id = request.POST['newsId']
-#     news = News.objects.get(pk=news_id)
-#     # 取消或者添加赞
-#     news.switch_like(request.user)
-#     # 返回赞的数量
-#     return JsonResponse({"likers_count": news.likers_count()})
-#
-#
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def like(request):
+    """点赞，响应AJAX POST请求"""
+    news_id = request.POST['newsId']
+    news = News.objects.get(pk=news_id)
+    # 取消或者添加赞
+    news.switch_like(request.user)
+    # 返回赞的数量
+    return JsonResponse({"likers_count": news.likers_count()})
+
+
 # @login_required
 # @ajax_required
 # @require_http_methods(["POST"])
