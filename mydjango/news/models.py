@@ -69,6 +69,6 @@ class News(models.Model):
         """所有点赞用户"""
         return self.likers.all()
 
-    def repies_count(self):
+    def replies_count(self):
         """评论数量"""
         return self.get_children().count()

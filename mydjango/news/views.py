@@ -58,19 +58,19 @@ def like(request):
     return JsonResponse({"likers_count": news.likers_count()})
 
 
-# @login_required
-# @ajax_required
-# @require_http_methods(["POST"])
-# def post_reply(request):
-#     """发送回复，AJAX POST请求"""
-#     replyContent = request.POST['replyContent'].strip()
-#     parentId = request.POST['newsid']
-#     parent = News.objects.get(pk=parentId)
-#     if replyContent:
-#         parent.reply_this(request.user, replyContent)
-#         return JsonResponse({'newsid': parent.pk,'replies_count': parent.replies_count()})
-#     else:
-#         return HttpResponseBadRequest("内容不能为空！")
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def post_reply(request):
+    """发送回复，AJAX POST请求"""
+    replyContent = request.POST['replyContent'].strip()  # 接收回复内容
+    parentId = request.POST['newsid']                    # 接收新闻id
+    parent = News.objects.get(pk=parentId)               # 查数据库得到新闻
+    if replyContent:
+        parent.reply_this(request.user, replyContent)
+        return JsonResponse({'newsid': parent.pk, 'replies_count': parent.replies_count()})  # 返回数据
+    else:
+        return HttpResponseBadRequest("内容不能为空！")
 #
 #
 # @ajax_required

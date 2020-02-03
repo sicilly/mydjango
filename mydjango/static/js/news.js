@@ -15,6 +15,7 @@ $(function () {
         $('#newsInput').trigger('focus')    // 自动聚焦
     });
 
+    //新增新闻动态
     $("#postNews").click(function () {
         if ($("#newsInput").val() === '') { //如果没有输入动态内容
             alert("请输入新闻动态的内容！");
@@ -43,6 +44,7 @@ $(function () {
         }
     });
 
+    //点赞
     $("ul.stream").on("click", ".like", function () {
         let li = $(this).closest('li');
         let newsId = $(li).attr("news-id");
@@ -68,6 +70,7 @@ $(function () {
         });
     });
 
+    //评论模态框
     $('#replyFormModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
         let recipient = button.data('who'); // Extract info from data-* attributes
@@ -77,4 +80,36 @@ $(function () {
         modal.find('.modal-body input.recipient').val(recipient);
         modal.find('.modal-body input.newsid').val(newsid);
     });
-})
+
+    //发送回复内容
+    $("#postReply").click(function () {
+        //评论内容为空
+        if ($("#reply-content").val() === '') {
+            alert("请输入评论的内容！");
+            return;
+        }
+        //用户未登录
+        if (currentUser === "") {
+            alert("请登录后再发布评论！");
+        } else {
+            // Ajax call after pushing button, to register a News object.
+            $.ajax({
+                url: '/news/post-reply/',
+                data: $("#postReplyForm").serialize(),
+                type: 'POST',
+                cache: false,
+                success: function (data) {
+                    let li = $('[news-id=' + data.newsid + ']');  // 获得li
+                    $(".reply .reply-count", li).text(data.replies_count);
+                    $("#reply-content").val("");
+                    $("#replyFormModal").modal("hide");
+                    // hide_stream_update();
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                },
+            });
+        }
+    });
+
+});
