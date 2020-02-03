@@ -17,7 +17,7 @@ class NewsListView(ListView):
     queryset = News.objects.filter(reply=False).all()  # 过滤出新闻（也可重写get_queryset函数)
     paginate_by = 10
     template_name = 'news/news_list.html'
-    context_object_name = 'news_list'
+    context_object_name = 'news_list'  # 上下文
 
     def get_queryset(self, *kwargs):
         return News.objects.filter(reply=False).all()
