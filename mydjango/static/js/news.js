@@ -43,7 +43,7 @@ $(function () {
         }
     });
 
-        $("ul.stream").on("click", ".like", function () {
+    $("ul.stream").on("click", ".like", function () {
         let li = $(this).closest('li');
         let newsId = $(li).attr("news-id");
         let payload = {
@@ -66,5 +66,15 @@ $(function () {
                 }
             }
         });
+    });
+
+    $('#replyFormModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let recipient = button.data('who'); // Extract info from data-* attributes
+        let newsid = button.data('newsid'); // Extract info from data-* attributes
+        let modal = $(this);  //模态对话框
+        modal.find('.modal-title').text('新的回复到： ' + recipient);
+        modal.find('.modal-body input.recipient').val(recipient);
+        modal.find('.modal-body input.newsid').val(newsid);
     });
 })

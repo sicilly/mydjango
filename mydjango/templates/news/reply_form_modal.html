@@ -1,0 +1,35 @@
+<div class="modal fade" id="replyFormModal" tabindex="-1" role="dialog"
+     aria-labelledby="replyFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="replyFormModalLabel">新的回复</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="postReplyForm" role="form" method="post" action="#" onsubmit="return false">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">新闻发布者:</label>
+                        <input type="text" class="recipient form-control" id="recipient-name"
+                               name="recipient">
+                    </div>
+                    <div class="form-group">
+                        <label for="newsid" class="col-form-label">新闻 ID:</label>
+                        <input type="text" class="newsid form-control" id="newsid" name="newsid">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">回复内容:</label>
+                        <textarea class="form-control" id="reply-content" name="replyContent"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="postReply">提交回复</button>
+            </div>
+        </div>
+    </div>
+</div>
