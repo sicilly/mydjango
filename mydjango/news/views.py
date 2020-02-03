@@ -3,12 +3,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-# from django.urls import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DeleteView
 
 from mydjango.news.models import News
-from mydjango.utils import ajax_required
+from mydjango.myutils import ajax_required, AuthorRequiredMixin
 
 
 class NewsListView(ListView):
@@ -35,15 +35,15 @@ def post_news(request):
         return HttpResponse(html)
     else:
         return HttpResponseBadRequest("内容不能为空！")
-#
-#
-# class NewsDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
-#     """删除一条新闻记录"""
-#     model = News
-#     # template_name_suffix = '_confirm_delete'
-#     template_name = 'news/news_confirm_delete.html'
-#     success_url = reverse_lazy('news:list') # 在项目的URLConf未加载前使用
-#
+
+
+class NewsDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
+    """删除一条新闻记录"""
+    model = News
+    # template_name_suffix = '_confirm_delete'
+    template_name = 'news/news_confirm_delete.html'
+    success_url = reverse_lazy('news:list')  # 在项目的URLConf未加载前使用
+
 # @login_required
 # @ajax_required
 # @require_http_methods(["POST"])

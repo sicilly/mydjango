@@ -9,7 +9,7 @@
     {% endthumbnail %}
     <div class="media-body">
       {% if request.user.username == news.user.username %}
-        <a href="#">
+        <a href="{% url 'news:delete_news' news.pk %}">
           <i class="fa fa-times pull-right" title="点击删除这条新闻动态"></i></a>
       {% endif %}
       <p>{{ news.content }}</p>
