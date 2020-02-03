@@ -1,4 +1,7 @@
 $(function () {
+    //从 cookie 里面获取 csrftoken
+    let csrftoken = getCookie('csrftoken');
+
     $('#newsFormModal').on('shown.bs.modal',function () {
         $('#newsInput').trigger('focus')    // 自动聚焦
     });
@@ -29,5 +32,30 @@ $(function () {
                 },
             });
         }
-    })
+    });
+
+        $("ul.stream").on("click", ".like", function () {
+        let li = $(this).closest('li');
+        let newsId = $(li).attr("news-id");
+        let payload = {
+            'newsId': newsId,
+            'csrf_token': csrftoken
+        };
+        $.ajax({
+            url: '/news/like/',
+            data: payload,
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                $(".like .like-count", li).text(data.likers_count);
+                if ($(".like .heart", li).hasClass("fa fa-heart")) {
+                    $(".like .heart", li).removeClass("fa fa-heart");
+                    $(".like .heart", li).addClass("fa fa-heart-o");
+                } else {
+                    $(".like .heart", li).removeClass("fa fa-heart-o");
+                    $(".like .heart", li).addClass("fa fa-heart");
+                }
+            }
+        });
+    });
 })
