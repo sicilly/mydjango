@@ -112,4 +112,17 @@ $(function () {
         }
     });
 
+    // 获取评论列表
+    $("ul.stream").on("click", ".reply", function () {
+        let li = $(this).closest('li');
+        let newsId = $(li).attr("news-id");
+        $.ajax({
+            url: '/news/get-replies/',
+            data: {'newsId': newsId},
+            cache: false,
+            success: function (data) {
+                $("#replyListModal .modal-body").html(data.replies_html);
+            }
+        });
+    });
 });

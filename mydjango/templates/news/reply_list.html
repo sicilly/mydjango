@@ -1,0 +1,17 @@
+{% load static humanize %}
+<ul>
+    {% for reply in replies %}
+        <li style="list-style: none" class="reply-item" reply-id="{{ reply.pk }}">
+            <div class="media">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ reply.user.get_profile_name }}</h5>
+                    <p>{{ reply.content }}</p>
+                    <div class="interaction">
+                        <span class="timestamp pull-left">{{ reply.updated_at|naturaltime }}</span>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </li>
+    {% endfor %}
+</ul>

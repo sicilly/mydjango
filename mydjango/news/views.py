@@ -71,17 +71,17 @@ def post_reply(request):
         return JsonResponse({'newsid': parent.pk, 'replies_count': parent.replies_count()})  # 返回数据
     else:
         return HttpResponseBadRequest("内容不能为空！")
-#
-#
-# @ajax_required
-# @require_http_methods(["GET"])
-# def get_replies(request):
-#     """返回新闻的评论，AJAX GET请求"""
-#     news_id = request.GET['newsId']
-#     news = News.objects.get(pk=news_id)
-#     # render_to_string()表示加载模板，填充数据，返回字符串
-#     replies_html = render_to_string("news/reply_list.html", {"replies": news.get_children()})  # 有评论的时候
-#     return JsonResponse({
-#         "newsid": news_id,
-#         "replies_html": replies_html,
-#     })
+
+
+@ajax_required
+@require_http_methods(["GET"])
+def get_replies(request):
+    """返回新闻的评论，AJAX GET请求"""
+    news_id = request.GET['newsId']
+    news = News.objects.get(pk=news_id)
+    # render_to_string()表示加载模板，填充数据，返回字符串
+    replies_html = render_to_string("news/reply_list.html", {"replies": news.get_children()})  # 有评论的时候
+    return JsonResponse({
+        "newsid": news_id,
+        "replies_html": replies_html,
+    })
