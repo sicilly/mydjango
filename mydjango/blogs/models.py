@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
+from slugify import slugify
 from mdeditor.fields import MDTextField
 from taggit.managers import TaggableManager
 
@@ -66,3 +67,12 @@ class Article(models.Model):
     class Meta:
         verbose_name = '文章'
         verbose_name_plural = verbose_name
+
+    # 重写Model的save方法
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            # 根据作者和标题生成文章在url中的别名
+            self.slug = slugify(self.title)  # title必须是唯一的
+            # 根据作者的username和标题生成文章在URL中的别名，保证了url的可读性也要保证唯一性
+            # self.slug = slugify(self.title + self.user.username + "-" + uuid.uuid4().__str__()[0:8])
+        super(Article, self).save(*args, **kwargs)
