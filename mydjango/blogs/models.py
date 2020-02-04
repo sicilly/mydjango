@@ -60,7 +60,7 @@ class Article(models.Model):
     object = ArticleQuerySet.as_manager()  # 将Article.objects替换成自定义的查询管理集
 
     def __str__(self):
-        return self.title
+        return self.title  # Admin中文章管理会显示title
 
     class Meta:
         verbose_name = '文章'
