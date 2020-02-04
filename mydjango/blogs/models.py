@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Count
 from taggit.managers import TaggableManager
 
 
@@ -17,8 +18,32 @@ class ArticleCategory(models.Model):
         verbose_name_plural = verbose_name
 
 
+class ArticleQuerySet(models.query.QuerySet):  # 继承查询集父类
+    """自定义QuerySet，提高模型类的可用性"""
+
+    def get_published(self):
+        """返回已发表的文章"""
+        return self.filter(status="P").order_by('-created_at')
+
+    def get_drafts(self):
+        """返回草稿箱的文章"""
+        return self.filter(status="D").order_by('-updated_at')
+
+    def get_counted_tags(self):
+        """统计所有已发布的文章中，每一个标签的数量(大于0的)"""
+        tag_dict = {}
+        query = self.filter(status='P').annotate(tagged=Count('tags')).filter(tags__gt=0)
+        for obj in query:
+            for tag in obj.tags.names():
+                if tag not in tag_dict:
+                    tag_dict[tag] = 1
+                else:
+                    tag_dict[tag] += 1
+        return tag_dict.items()
+
+
 class Article(models.Model):
-    STATUS = (("D", "Draft"), ("P", "Published"))
+    STATUS = (("D", "Draft"), ("P", "Published"))  # 在前端渲染出来是select控件
     status = models.CharField(max_length=1, choices=STATUS, default='D', verbose_name='文章状态')  # 默认存入草稿箱
     category = models.ForeignKey(ArticleCategory, verbose_name="文章类别", null=True,
                                  blank=True, on_delete=models.SET_NULL)
@@ -32,6 +57,7 @@ class Article(models.Model):
     tags = TaggableManager(help_text='多个标签使用英文逗号(,)隔开', verbose_name='文章标签')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    object = ArticleQuerySet.as_manager()  # 将Article.objects替换成自定义的查询管理集
 
     def __str__(self):
         return self.title
