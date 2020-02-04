@@ -74,6 +74,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.github',  # github登录
     'sorl.thumbnail',  # 缩略图
     'taggit',          # 标签
+    'mdeditor',
 ]
 
 LOCAL_APPS = [

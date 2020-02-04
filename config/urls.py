@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.urls import include, path
+from django.conf.urls import url
+from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
@@ -14,6 +15,9 @@ urlpatterns = [
     path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
+
+    # 第三方APP的路由
+    re_path(r'mdeditor/', include('mdeditor.urls')),
 
     # User management 用户管理
     path("users/", include("mydjango.users.urls", namespace="users")),
