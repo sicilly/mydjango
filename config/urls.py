@@ -9,7 +9,7 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
 
-    path("blogs/", TemplateView.as_view(template_name="pages/blogs.html"), name="blogs"),
+
     path("quora/", TemplateView.as_view(template_name="pages/quora.html"), name="quora"),
     path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
     # Django Admin, use {% url 'admin:index' %}
@@ -21,7 +21,8 @@ urlpatterns = [
 
     # 我们自己写的App
     path("news/", include("mydjango.news.urls", namespace="news")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("blogs/", include("mydjango.blogs.urls", namespace="blogs")),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
