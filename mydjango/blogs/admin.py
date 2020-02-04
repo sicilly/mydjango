@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+# from mdeditor.widgets import MDEditorWidget
 
 from mydjango.blogs.models import ArticleCategory, Article  # 必须加包名
 
@@ -8,6 +10,7 @@ class ArticleCategoryAdmin(admin.ModelAdmin):
 
 
 class ArticleAdmin(admin.ModelAdmin):
+    # 重载表单域 （只要是TextField都会被替换成MDEditorWidget，渲染出md编辑器）
     # formfield_overrides = {
     #     models.TextField: {'widget': MDEditorWidget}
     # }
