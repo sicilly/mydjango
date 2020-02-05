@@ -15,7 +15,7 @@ class NewsListView(ListView):
     """新闻列表页"""
     model = News
     queryset = News.objects.filter(reply=False).all()  # 过滤出新闻（也可重写get_queryset函数)
-    paginate_by = 10
+    paginate_by = 5
     template_name = 'news/news_list.html'
     context_object_name = 'news_list'  # 上下文
 

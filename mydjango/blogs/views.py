@@ -6,7 +6,7 @@ from mydjango.blogs.models import Article, ArticleCategory
 class ArticleListView(ListView):
     """已发布的文章列表"""
     model = Article
-    paginate_by = 5
+    paginate_by = 5     # 分页 一页5篇文章
     context_object_name = 'article_list'
     template_name = "blogs/article_list.html"
 
