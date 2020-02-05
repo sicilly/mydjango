@@ -7,4 +7,5 @@ app_name = "blogs"
 
 urlpatterns = [
     path("", views.ArticleListView.as_view(), name="list"),
+    path("article-create", views.ArticleCreateView.as_view(), name="create")
 ]
