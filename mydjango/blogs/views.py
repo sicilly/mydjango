@@ -23,6 +23,12 @@ class ArticleListView(ListView):
         return context
 
 
+class DraftListView(ArticleListView):
+    """复用ArticleListView 草稿箱文章列表"""
+    def get_queryset(self, **kwargs):
+        return Article.objects.get_drafts()
+
+
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     """创建文章"""
     model = Article
