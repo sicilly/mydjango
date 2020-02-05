@@ -11,8 +11,9 @@
 {% block content %}
   <div class="container">
     <div class="row">
+      {# 渲染md编辑器 #}
       {{ form.media }}
-      <form role="form" method="post" enctype="multipart/form-data" action="{% url 'blogs:create' %}" id="articleForm">
+      <form role="form" method="post" enctype="multipart/form-data" action="{% url 'blogs:create' %}" id="articleForm" style="width: 100%">
         {% csrf_token %}
         {{ form|crispy }}
         <div class="form-group">

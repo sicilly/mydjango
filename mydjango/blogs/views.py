@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from mydjango.blogs.models import Article, ArticleCategory
 from blogs.form import ArticleForm
@@ -28,12 +30,16 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name_suffix = '_form'
     template_name = "blogs/article_form.html"
 
-    # def form_valid(self, form):
-    #     form.instance.user = self.request.user
-    #     return super(ArticleCreateView,self).form_valid(form)
-    #
-    # # success_url = reverse_lazy('blogs:list')
-    # def get_success_url(self):
-    #     message = "您的文章已创建成功！"  # Django框架中的消息闪现机制
-    #     messages.success(self.request, message)  # 消息传递给下一次请求
-    #     return reverse_lazy('blogs:list')
+    # 表单验证
+    def form_valid(self, form):
+        form.instance.user = self.request.user  # form.instance是article的对象实例
+        return super(ArticleCreateView, self).form_valid(form)
+
+    # 发表文章成功后跳转
+    # success_url = reverse_lazy('blogs:list')
+
+    # 发表文章成功后跳转 并提示创建成功的消息
+    def get_success_url(self):
+        message = "您的文章已创建成功！"  # Django框架中的消息闪现机制
+        messages.success(self.request, message)  # 消息传递给下一次请求
+        return reverse_lazy('blogs:list')  # 返回到列表页
