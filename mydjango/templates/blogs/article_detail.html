@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ article.title }} | {{ block.super }}
+{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <!-- 标题 -->
+        <h3 class="text-center">{{ article.title|title }}</h3>
+        <hr/>
+
+        <!-- 作者 -->
+        <p class="text-left">
+          <a href="{% url 'users:detail' article.user.username %}">{{ article.user.get_profile_name }}</a>
+          发表于{{ article.created_at|date:"Y-m-d" }}
+          {% if request.user.username == article.user.username %}|
+            <a href="#" title="编辑文章" class="ml-2"><i
+                    class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              编辑本文</a>
+          {% endif %}
+          <a href="#" class="ml-2">收藏本文</a>
+          |
+          <a href="#" class="ml-2">分享本文</a>
+        </p>
+        <hr/>
+
+{#        <!-- 文章内容 -->#}
+{#        <div id="test-editormd-view">#}
+{#          <textarea id="markdown-textarea" style="display:none;" name="test-editormd-markdown-doc">{{ article.content }}#}
+{#          </textarea>#}
+{#        </div>#}
+{#        <hr/>#}
+
+      </div>
+
+      <div class="col-md-4">
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modal %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

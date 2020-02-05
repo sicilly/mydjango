@@ -49,3 +49,10 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         message = "您的文章已创建成功！"  # Django框架中的消息闪现机制
         messages.success(self.request, message)  # 消息传递给下一次请求
         return reverse_lazy('blogs:list')  # 返回到列表页
+
+
+class ArticleDetailView(DetailView):
+    """文章详情"""
+    model = Article
+    template_name = 'blogs/article_detail.html'
+    context_object_name = 'article'

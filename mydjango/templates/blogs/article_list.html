@@ -31,7 +31,7 @@
                 <ul class="list-unstyled">
                     {% for article in article_list %}
                         <li class="media {% cycle '' 'my-4' %}">
-                            <a href="#">
+                            <a href="{% url 'blogs:detail' article.slug %}">
                                 {% thumbnail article.cover "280x400" as im %}
                                     <img height="140" width="220" src="{{ im.url }}" class="mr-3" alt="文章图片">
                                 {% empty %}
@@ -41,7 +41,7 @@
                             </a>
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1">
-                                    {{ article.title }}
+                                  <a href="{% url 'blogs:detail' article.slug %}">{{ article.title }}</a>
                                 </h5>
                                 <p style="font-size: small">
                                     {{ article.abstract|safe|truncatechars:80 }}
