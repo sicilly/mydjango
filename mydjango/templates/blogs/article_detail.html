@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
 {{ article.title }} | {{ block.super }}
 {% endblock %}
 
 {% block css %}
-
+  <link rel="stylesheet" href="{% static 'editormd_src/css/editormd.preview.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -30,17 +31,20 @@
         </p>
         <hr/>
 
-{#        <!-- 文章内容 -->#}
-{#        <div id="test-editormd-view">#}
-{#          <textarea id="markdown-textarea" style="display:none;" name="test-editormd-markdown-doc">{{ article.content }}#}
-{#          </textarea>#}
-{#        </div>#}
-{#        <hr/>#}
-
+        <!-- 文章内容 -->
+        <div id="test-editormd-view">
+          <textarea id="markdown-textarea" style="display:none;" name="test-editormd-markdown-doc">{{ article.content }}
+          </textarea>
+        </div>
+        <hr/>
       </div>
 
       <div class="col-md-4">
-
+        <!-- 文章目录 -->
+        <div class="card  my-2">
+          <h6 class="card-header">文章目录</h6>
+          <div class="card-body" style="padding: 8px" id="custom-toc-container"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -51,5 +55,33 @@
 {% endblock %}
 
 {% block javascript %}
-
+    <script src="{% static 'editormd_src/js/jquery.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/marked.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/prettify.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/raphael.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/underscore.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/sequence-diagram.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/flowchart.min.js' %}"></script>
+    <script src="{% static 'editormd_src/lib/jquery.flowchart.min.js' %}"></script>
+    <script src="{% static 'editormd_src/js/editormd.js' %}"></script>
+    <script type="text/javascript">
+      $(function () {
+        let testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+          markdown: $('#markdown-textarea').text(),// 直接将markdown文本写入到 textarea 里面，再读取出来，传入此处
+          //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+          htmlDecode: "style,script,iframe",  // you can filter tags decode
+          toc: true,
+          {#tocm: true,    // Using [TOCM]#}
+          tocContainer: "#custom-toc-container", // 自定义 ToC 容器层
+          //gfm             : false,
+          {#tocDropdown: true,#}
+          // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+          emoji: true,
+          taskList: true,
+          tex: true,  // 默认不解析
+          flowChart: true,  // 默认不解析
+          sequenceDiagram: true,  // 默认不解析
+        });
+      });
+    </script>
 {% endblock %}
