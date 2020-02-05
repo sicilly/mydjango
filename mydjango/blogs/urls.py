@@ -6,5 +6,5 @@ from mydjango.blogs import views
 app_name = "blogs"
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/blogs.html"), name="list"),
+    path("", views.ArticleListView.as_view(), name="list"),
 ]

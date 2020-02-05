@@ -59,7 +59,7 @@ class Article(models.Model):
     tags = TaggableManager(help_text='多个标签使用英文逗号(,)隔开', verbose_name='文章标签')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
-    object = ArticleQuerySet.as_manager()  # 将Article.objects替换成自定义的查询管理集
+    objects = ArticleQuerySet.as_manager()  # 将Article.objects替换成自定义的查询管理集
 
     def __str__(self):
         return self.title  # Admin中文章管理会显示title
