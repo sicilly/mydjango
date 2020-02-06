@@ -18,6 +18,7 @@ urlpatterns = [
 
     # 第三方APP的路由
     re_path(r'mdeditor/', include('mdeditor.urls')),
+    re_path(r'^comments/', include('django_comments.urls')),
 
     # User management 用户管理
     path("users/", include("mydjango.users.urls", namespace="users")),

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static crispy_forms_tags comments thumbnail%}
 {% block title %}
 {{ article.title }} | {{ block.super }}
 {% endblock %}
@@ -37,6 +37,47 @@
           </textarea>
         </div>
         <hr/>
+
+        <!-- 文章评论数 -->
+        {% get_comment_count for article as comment_count %}
+        <h6>当前文章的评论数： {{ comment_count }}</h6>
+        <hr/>
+        <!-- 文章评论表单 -->
+        {#                {% render_comment_form for article %}#}
+        <div class="card my-4">
+          <h5 class="card-header">评论</h5>
+          <div class="card-body">
+            {% if request.user.is_authenticated %}
+              {% get_comment_form for article as form %}
+              <form action="{% comment_form_target %}" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="hidden" name="next" value="{% url 'blogs:detail' article.slug %}"/>
+                <input class="btn btn-info" type="submit" value="提交" id="id_submit"/>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+        <hr/>
+
+        <!--评论列表-->
+        {% get_comment_list for article as comment_list %}
+        {% for comment in comment_list %}
+          <div class="media mb-4">
+            {% thumbnail comment.user.avatar "x50" as im %}
+              <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="用户头像" id="pic"/>
+            {% empty %}
+              <img class="d-flex mr-3 rounded-circle" src="{% static 'images/user.png' %}" height="50px"
+                   alt="没有头像"/>
+            {% endthumbnail %}
+            <div class="media-body">
+              <h5 class="mt-0">{{ comment.user.get_profile_name }}</h5>
+              {{ comment.comment }}
+            </div>
+          </div>
+        {% endfor %}
+
+
       </div>
 
       <div class="col-md-4">
