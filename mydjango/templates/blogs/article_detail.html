@@ -21,7 +21,7 @@
           <a href="{% url 'users:detail' article.user.username %}">{{ article.user.get_profile_name }}</a>
           发表于{{ article.created_at|date:"Y-m-d" }}
           {% if request.user.username == article.user.username %}|
-            <a href="#" title="编辑文章" class="ml-2"><i
+            <a href="{% url 'blogs:update' article.pk %}" title="编辑文章" class="ml-2"><i
                     class="fa fa-pencil-square-o" aria-hidden="true"></i>
               编辑本文</a>
           {% endif %}

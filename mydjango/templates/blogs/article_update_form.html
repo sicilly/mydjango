@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+{% block title %}
+编辑文章 | {{ block.super }}
+{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      {# 渲染md编辑器 #}
+      {{ form.media }}
+      <form role="form" method="post" enctype="multipart/form-data" action="{% url 'blogs:update' form.instance.pk %}" id="articleForm" style="width: 100%">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary publish">发表文章</button>
+{#          <button type="button" class="btn btn-default draft">保存草稿</button>#}
+          <a class="btn btn-light" style="float:right" href="{% url 'blogs:list' %}">取消</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modal %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

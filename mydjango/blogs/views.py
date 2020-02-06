@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from mydjango.blogs.models import Article, ArticleCategory
 from blogs.form import ArticleForm
+from myutils import AuthorRequiredMixin
 
 
 class ArticleListView(ListView):
@@ -33,8 +34,8 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     """创建文章"""
     model = Article
     form_class = ArticleForm
-    template_name_suffix = '_form'
-    template_name = "blogs/article_form.html"
+    template_name_suffix = '_create_form'
+    template_name = "blogs/article_create_form.html"
 
     # 表单验证
     def form_valid(self, form):
@@ -56,3 +57,21 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = 'blogs/article_detail.html'
     context_object_name = 'article'
+
+
+class ArticleUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+    """用户更新文章 需要登录"""
+    model = Article
+    form_class = ArticleForm
+    template_name_suffix = '_update_form'
+    template_name = "blogs/article_update_form.html"
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(ArticleUpdateView, self).form_valid(form)
+
+    # success_url = reverse_lazy('blogs:list')
+    def get_success_url(self):
+        message = "您的文章已更新成功！"  # Django框架中的消息闪现机制
+        messages.success(self.request, message)  # 消息传递给下一次请求
+        return reverse_lazy('blogs:detail', kwargs={'slug': self.get_object().slug})  # 传入路由的关键字参数
