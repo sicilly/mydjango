@@ -1,6 +1,27 @@
+import uuid
+
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from taggit.managers import TaggableManager
+
+
+class Vote(models.Model):
+    """使用Django中的ContentType, 同时关联用户对问题和回答的投票"""
+    uuid_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='votes', on_delete=models.CASCADE, verbose_name='用户')
+    value = models.BooleanField(default=True, verbose_name='赞同或反对')  # True赞同，False反对
+    # GenericForeignKey设置
+    content_type = models.ForeignKey(ContentType, related_name='votes_on', on_delete=models.CASCADE)
+    object_id = models.CharField(max_length=255)  # 关联到整形和非整形的逐渐上，用CharField
+    vote = GenericForeignKey('content_type', 'object_id')  # 等同于GenericForeignKey()
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    class Meta:
+        verbose_name = '投票'
+        verbose_name_plural = verbose_name
 
 
 class QuestionQuerySet(models.query.QuerySet):
@@ -39,6 +60,7 @@ class Question(models.Model):
     has_correct = models.BooleanField(default=False, verbose_name="是否有正确回答")  # 是否有接受的正确回答
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    objects = QuestionQuerySet.as_manager()
 
     class Meta:
         verbose_name = '问题'
@@ -63,9 +85,8 @@ class Question(models.Model):
 
 class Answer(models.Model):
     """问题答案"""
-    # uuid_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="answers",
-                             on_delete=models.CASCADE, verbose_name='回答者')
+    uuid_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="answers",on_delete=models.CASCADE, verbose_name='回答者')
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers", verbose_name='问题')
     content = models.TextField(verbose_name='答案内容')
     is_accepted = models.BooleanField(default=False, verbose_name='是否被接受')
