@@ -1,7 +1,8 @@
 import uuid
+from collections import Counter
 
 from django.conf import settings
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from taggit.managers import TaggableManager
@@ -60,6 +61,7 @@ class Question(models.Model):
     has_correct = models.BooleanField(default=False, verbose_name="是否有正确回答")  # 是否有接受的正确回答
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    votes = GenericRelation(Vote, verbose_name='投票情况')  # 通过GenericRelation关联到Vote表，不是实际的字段
     objects = QuestionQuerySet.as_manager()
 
     class Meta:
@@ -82,6 +84,20 @@ class Question(models.Model):
         """被接受的回答"""
         return Answer.objects.get(question=self, is_accepted=True)
 
+    def get_upvoters(self):
+        """赞同的用户"""
+        return [vote.user for vote in self.votes.filter(value=True)]
+
+    def get_downvoters(self):
+        """反对的用户"""
+        return [vote.user for vote in self.votes.filter(value=False)]
+
+    def total_votes(self):
+        # """得票数: 赞成票-反对票"""
+        # return len(self.get_upvoters())-len(self.get_downvoters())
+        dic = Counter(self.votes.values_list('value', flat=True))  # Counter赞同票多少，反对票少数
+        return dic[True] - dic[False]
+
 
 class Answer(models.Model):
     """问题答案"""
@@ -93,7 +109,7 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
-    # votes = GenericRelation(Vote, verbose_name='投票情况')  # 通过GenericRelation关联到Vote表
+    votes = GenericRelation(Vote, verbose_name='投票情况')  # 通过GenericRelation关联到Vote表
 
     class Meta:
         ordering = ('-is_accepted', '-created_at')  # 多字段排序
@@ -102,3 +118,29 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.content
+
+    def get_upvoters(self):
+        """赞同的用户"""
+        return [vote.user for vote in self.votes.filter(value=True)]
+
+    def get_downvoters(self):
+        """反对的用户"""
+        return [vote.user for vote in self.votes.filter(value=False)]
+
+    def total_votes(self):
+        """得票数: 赞成票-反对票"""
+        # return len(self.get_upvoters())-len(self.get_downvoters())
+        dic = Counter(self.votes.values_list('value', flat=True))  # Counter赞同票多少，反对票少数
+        return dic[True] - dic[False]
+
+    # def accept_answer(self):
+    #     """接受回答"""
+    #     # 当一个问题有多个回答的时候，只能采纳一个回答，其它回答一律置为未接受
+    #     answer_set = Answer.objects.filter(question=self.question)  # 查询当前问题的所有回答
+    #     answer_set.update(is_accepted=False)  # 一律置为未接受
+    #     # 接受当前回答并保存
+    #     self.is_accepted = True
+    #     self.save()
+    #     # 该问题已有被接受的回答，保存
+    #     self.question.has_correct = True
+    #     self.question.save()
