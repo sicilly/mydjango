@@ -27,6 +27,7 @@ urlpatterns = [
     # 我们自己写的App
     path("news/", include("mydjango.news.urls", namespace="news")),
     path("blogs/", include("mydjango.blogs.urls", namespace="blogs")),
+    path("quora/", include("mydjango.quora.urls", namespace="quora")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

@@ -82,6 +82,7 @@ LOCAL_APPS = [
     "mydjango.users.apps.UsersConfig",
     "mydjango.news.apps.NewsConfig",    # 新闻动态
     "mydjango.blogs.apps.BlogsConfig",  # 博客文章
+    "mydjango.quora.apps.QuoraConfig",  # 有问有答
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
