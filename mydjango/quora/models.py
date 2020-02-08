@@ -1,10 +1,10 @@
 import uuid
 from collections import Counter
-
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from slugify import slugify
 from taggit.managers import TaggableManager
 
 
@@ -71,6 +71,11 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)  # title必须是唯一的
+        super(Question, self).save(*args, **kwargs)
 
     def get_all_answers(self):
         """获取所有的回答"""
