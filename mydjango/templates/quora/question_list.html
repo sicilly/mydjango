@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}
+  问题列表页 | {{ block.super }}
+{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row mt-2">
+      <div class="card" style="width: 100%;">
+        <h5 class="card-header p-1">按话题分类
+          <a href="#" class="btn-sm btn-primary pull-right">
+            <i class="fa fa-pencil" aria-hidden="true"></i> 提问
+          </a>
+        </h5>
+        <div class="card-body p-2">
+          {% for tag, count in popular_tags %}
+            <a href="#"><span class="badge badge-warning">{{ tag }}({{ count }})</span></a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  <div class="row mt-2">
+    <ul class="nav nav-tabs">
+      <li class="nav-item ">
+        <a class="nav-link {% ifequal active 'all' %} active {% endifequal %}"
+           href="#">所有问题</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link {% ifequal active 'correct_answered' %} active {% endifequal %}"
+           href="#">已采纳</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link {% ifequal active 'uncorrect_answered' %} active {% endifequal %}"
+           href="#">未采纳</a>
+      </li>
+    </ul>
+    {% for item in question_list %}
+      {% include 'quora/question_single.html' with question=item %}
+    {% empty %}
+      <h4 class="no-data">没有要显示的问题</h4>
+    {% endfor %}
+  </div>
+  </div>
+{% endblock %}
+
+{% block modal %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

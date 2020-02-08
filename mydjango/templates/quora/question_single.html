@@ -1,0 +1,41 @@
+{% load humanize %}
+
+<div class="card w-100">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h5 class="{% if question.has_correct %}
+                        bg-success text-white
+                        {% endif %}">{{ question.count_answers }}</h5>
+                        <small class="text-secondary">回答</small>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>{{ question.total_votes }}</h5>
+                        <small class="text-secondary">投票</small>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>{{ question.clicknum }}</h5>
+                        <small class="text-secondary">浏览</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <p style="font-size: 20px"><a href="{#  #}">{{ question.title|title }}</a></p>
+                <span>
+                {% if question.tags.names %}
+                    {% for tag in question.tags.names %}
+                        <span class="badge badge-info"> {{ tag }}</span>
+                    {% endfor %}
+                {% endif %}
+            </span>
+                <span class="question-user pull-right">
+                <a href="#">{{ question.user.get_profile_name }} </a>
+                <span class="text-secondary"> {{ question.created_at|naturaltime }}提问</span>
+            </span>
+            </div>
+        </div>
+
+    </div>
+</div>

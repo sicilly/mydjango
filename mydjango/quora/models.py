@@ -45,7 +45,7 @@ class QuestionQuerySet(models.query.QuerySet):
                     tag_dict[tag] = 1
                 else:
                     tag_dict[tag] += 1
-        return tag_dict.items()
+        return tag_dict.items()  # 返回的是键值对
 
 
 class Question(models.Model):

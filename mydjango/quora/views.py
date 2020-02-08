@@ -7,7 +7,7 @@ class QuestionListView(ListView):
     """所有问题页"""
     model = Question
     paginate_by = 20
-    context_object_name = 'question-list'
+    context_object_name = 'question_list'  # 上下文变量 不要用"-"号
     template_name = 'quora/question_list.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
