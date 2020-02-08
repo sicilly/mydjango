@@ -14,7 +14,7 @@
     <div class="row mt-2">
       <div class="card" style="width: 100%;">
         <h5 class="card-header p-1">按话题分类
-          <a href="#" class="btn-sm btn-primary pull-right">
+          <a href="{% url 'quora:ask_question' %}" class="btn-sm btn-primary pull-right">
             <i class="fa fa-pencil" aria-hidden="true"></i> 提问
           </a>
         </h5>
@@ -29,7 +29,7 @@
      <ul class="nav nav-tabs">
       <li class="nav-item ">
         <a class="nav-link {% ifequal active 'all' %} active {% endifequal %}"
-           href="{% url 'quora:all-question' %}">所有问题</a>
+           href="{% url 'quora:all-questions' %}">所有问题</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link {% ifequal active 'correct_answered' %} active {% endifequal %}"

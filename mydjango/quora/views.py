@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
 from mydjango.quora.models import Question
-# from quora.forms import QuestionForm
+from mydjango.quora.forms import QuestionForm
 
 
 class QuestionListView(ListView):
@@ -45,17 +45,17 @@ class UncorrectAnsweredQuestionListView(QuestionListView):
         return context
 
 
-# class QuestionCreateView(LoginRequiredMixin, CreateView):
-#     """用户提问"""
-#     model = Question
-#     form_class = QuestionForm
-#     template_name_suffix = '_create_form'
-#     template_name = 'quora/question_create_form.html'
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super(QuestionCreateView, self).form_valid(form)
-#
-#     def get_success_url(self):
-#         messages.success(self.request, "问题已提交！")
-#         return reverse_lazy("quora:all-questions")
+class QuestionCreateView(LoginRequiredMixin, CreateView):
+    """用户提问"""
+    model = Question
+    form_class = QuestionForm
+    template_name_suffix = '_create_form'
+    template_name = 'quora/question_create_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(QuestionCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, "问题已提交！")
+        return reverse_lazy("quora:all-questions")

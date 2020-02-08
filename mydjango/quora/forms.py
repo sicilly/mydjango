@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from quora.models import Question
+from mydjango.quora.models import Question  # 要加上mydjango！
 
 
 class QuestionForm(ModelForm):
