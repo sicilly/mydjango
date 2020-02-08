@@ -26,18 +26,18 @@
       </div>
     </div>
   <div class="row mt-2">
-    <ul class="nav nav-tabs">
+     <ul class="nav nav-tabs">
       <li class="nav-item ">
         <a class="nav-link {% ifequal active 'all' %} active {% endifequal %}"
-           href="#">所有问题</a>
+           href="{% url 'quora:all-question' %}">所有问题</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link {% ifequal active 'correct_answered' %} active {% endifequal %}"
-           href="#">已采纳</a>
+           href="{% url 'quora:correct-answered-questions'%}">已采纳</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link {% ifequal active 'uncorrect_answered' %} active {% endifequal %}"
-           href="#">未采纳</a>
+           href="{% url 'quora:uncorrect-answered-questions' %}">未采纳</a>
       </li>
     </ul>
     {% for item in question_list %}

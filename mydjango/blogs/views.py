@@ -35,7 +35,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     form_class = ArticleForm
     template_name_suffix = '_create_form'
-    template_name = "blogs/article_create_form.html"
+    template_name = "blogs/../templates/quora/article_create_form.html"
 
     # 表单验证
     def form_valid(self, form):
