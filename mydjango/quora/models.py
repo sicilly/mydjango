@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 from slugify import slugify
 from taggit.managers import TaggableManager
 
@@ -78,6 +79,9 @@ class Question(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)  # 现在允许slug重复
         super(Question, self).save(*args, **kwargs)
+
+    def get_markdown(self):
+        return markdownify(self.content)
 
     def get_all_answers(self):
         """获取所有的回答"""
