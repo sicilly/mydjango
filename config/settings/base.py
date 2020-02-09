@@ -65,6 +65,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",  # Handy template tags
     "django.contrib.admin",
+    "django.forms",  # 管理form的渲染过程
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -75,6 +76,7 @@ THIRD_PARTY_APPS = [
     'sorl.thumbnail',  # 缩略图
     'taggit',          # 标签
     'mdeditor',        # md编辑器
+    'markdownx',       # MarkdownX
     'django_comments',  # 评论
 ]
 
@@ -164,6 +166,8 @@ MEDIA_ROOT = str(APPS_DIR("media"))
 MEDIA_URL = "/media/"
 
 # TEMPLATES 模板
+# 更改form组件的查找顺序：先查找自定义的，再查找django自带的
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
 TEMPLATES = [

@@ -5,7 +5,7 @@ from mydjango.blogs.models import Article
 
 
 class ArticleForm(forms.ModelForm):
-    content = MDTextFormField()
+    content = MDTextFormField()  # content改成用md来渲染
 
     class Meta:
         model = Article

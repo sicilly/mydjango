@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from markdownx.models import MarkdownxField
 from slugify import slugify
 from taggit.managers import TaggableManager
 
@@ -11,7 +12,8 @@ from taggit.managers import TaggableManager
 class Vote(models.Model):
     """使用Django中的ContentType, 同时关联用户对问题和回答的投票"""
     uuid_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='votes', on_delete=models.CASCADE, verbose_name='用户')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='votes',
+                             on_delete=models.CASCADE, verbose_name='用户')
     value = models.BooleanField(default=True, verbose_name='赞同或反对')  # True赞同，False反对
     # GenericForeignKey设置
     content_type = models.ForeignKey(ContentType, related_name='votes_on', on_delete=models.CASCADE)
@@ -55,7 +57,7 @@ class Question(models.Model):
     title = models.CharField(max_length=255, unique=False, verbose_name='问题标题')
     slug = models.SlugField(max_length=255, null=True, blank=True, verbose_name='(URL)别名')
     status = models.CharField(max_length=1, choices=STATUS, default='O', verbose_name='问题状态')
-    content = models.TextField(verbose_name='问题内容')
+    content = MarkdownxField(verbose_name='问题内容')
     clicknum = models.IntegerField(verbose_name="浏览量", default=0)
     tags = TaggableManager(help_text='多个标签使用,(英文)隔开', verbose_name='问题标签')
     has_correct = models.BooleanField(default=False, verbose_name="是否有正确回答")  # 是否有接受的正确回答
