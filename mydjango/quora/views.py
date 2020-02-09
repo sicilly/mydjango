@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 
 from mydjango.quora.models import Question
 from mydjango.quora.forms import QuestionForm
@@ -59,3 +59,12 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, "问题已提交！")
         return reverse_lazy("quora:all-questions")
+
+
+class QuestionDetailView(DetailView):
+    """问题详情页"""
+    model = Question
+    context_object_name = 'question'
+    template_name = 'quora/question_detail.html'
+    query_pk_and_slug = True  # 同时用上pk和slug，保证url的唯一性和可读性
+    slug_url_kwarg = 'slug'  # 默认就是slug

@@ -76,7 +76,7 @@ class Question(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)  # title必须是唯一的
+            self.slug = slugify(self.title)  # 现在允许slug重复
         super(Question, self).save(*args, **kwargs)
 
     def get_all_answers(self):
