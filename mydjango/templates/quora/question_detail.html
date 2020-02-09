@@ -12,6 +12,7 @@
 
 {% block content %}
     <div class="container">
+        {# 问题标题 #}
         <div class="page-header mt-2">
             <h4>{{ question.title }}
                 <a href="{% url 'quora:ask_question' %}" class="btn-sm btn-primary pull-right">
@@ -20,6 +21,7 @@
             </h4>
             <hr/>
         </div>
+        {# 问题详情 #}
         <div class="row question" question-id="{{ question.pk }}">
             <div class="col-md-11">
                 <p>{{ question.get_markdown|safe }}</p>
@@ -48,7 +50,7 @@
                 </div>
             </div>
         </div>
-
+        {# 答案统计 #}
         <div class="page-header">
             <hr/>
             <h5>所有回答 {{ question.count_answers }} 条： {% if question.has_correct %}已有{% else %}还没{% endif %}答案被采纳。
@@ -56,13 +58,14 @@
             </h5>
             <hr/>
         </div>
-{#        <div class="row">#}
-{#            <ul class="col-md-12">#}
-{#                {% for item in question.answers.all %}#}
-{#                    {% include 'quora/answer_single.html' with answer=item %}#}
-{#                {% endfor %}#}
-{#            </ul>#}
-{#        </div>#}
+        {# 答案列表 #}
+        <div class="row">
+            <ul class="col-md-12">
+                {% for item in question.answers.all %}
+                    {% include 'quora/answer_single.html' with answer=item %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
 

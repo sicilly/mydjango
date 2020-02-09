@@ -68,3 +68,6 @@ class QuestionDetailView(DetailView):
     template_name = 'quora/question_detail.html'
     query_pk_and_slug = True  # 同时用上pk和slug，保证url的唯一性和可读性
     slug_url_kwarg = 'slug'  # 默认就是slug
+
+    # def get_context_data(self, **kwargs):
+    #     context['answers'] = Answer.objects.filter(question=self.get_object())

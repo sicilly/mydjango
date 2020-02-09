@@ -130,6 +130,9 @@ class Answer(models.Model):
     def __str__(self):
         return self.content
 
+    def get_markdown(self):
+        return markdownify(self.content)
+
     def get_upvoters(self):
         """赞同的用户"""
         return [vote.user for vote in self.votes.filter(value=True)]
