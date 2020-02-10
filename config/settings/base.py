@@ -65,7 +65,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",  # Handy template tags
     "django.contrib.admin",
-    "django.forms",  # 管理form的渲染过程
+    "django.forms",  # 用于后面重写django内置的widget模板
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",

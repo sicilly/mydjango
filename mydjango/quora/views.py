@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView
 
-from mydjango.quora.models import Question
+from mydjango.quora.models import Question, Answer
 from mydjango.quora.forms import QuestionForm
 
 
@@ -71,3 +71,21 @@ class QuestionDetailView(DetailView):
 
     # def get_context_data(self, **kwargs):
     #     context['answers'] = Answer.objects.filter(question=self.get_object())
+
+
+class AnswerCreateView(LoginRequiredMixin, CreateView):
+    """回答问题"""
+    model = Answer
+    fields = ['content', ]
+    template_name_suffix = '_create_form'
+    template_name = 'quora/answer_create_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.question_id = self.kwargs['question_id']
+        return super(AnswerCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, "回答已提交！")
+        return reverse_lazy("quora:question_detail", kwargs={"pk": self.kwargs['question_id'],
+                                                             "slug": self.kwargs['question_slug']})
