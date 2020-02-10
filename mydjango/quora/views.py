@@ -1,10 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, CreateView, DetailView
 
 from mydjango.quora.models import Question, Answer
 from mydjango.quora.forms import QuestionForm
+from mydjango.myutils import ajax_required
 
 
 class QuestionListView(ListView):
@@ -94,3 +97,18 @@ class AnswerCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, "回答已提交！")
         return reverse_lazy("quora:question_detail", kwargs={"pk": self.kwargs['question_id'],
                                                              "slug": self.kwargs['question_slug']})
+
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def question_vote(request):
+    """给问题投票，AJAX POST请求"""
+    question_id = request.POST["questionId"]
+    value = True if request.POST["value"] == 'U' else False  # 'U'表示赞成，'D'表示反对
+    question = Question.objects.get(pk=question_id)
+    users = question.votes.values_list('user', flat=True)  # 当前问题的所有投票用户
+    if request.user.pk in users and (question.votes.get(user=request.user).value == value):
+        question.votes.get(user=request.user).delete()
+    else:
+        question.votes.update_or_create(user=request.user, defaults={"value": value})
