@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, CreateView, DetailView
@@ -112,3 +113,4 @@ def question_vote(request):
         question.votes.get(user=request.user).delete()
     else:
         question.votes.update_or_create(user=request.user, defaults={"value": value})
+    return JsonResponse({"votes": question.total_votes()})  # 返回响应

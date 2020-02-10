@@ -12,4 +12,5 @@ urlpatterns = [
     path('question/<int:pk>/<str:slug>/', views.QuestionDetailView.as_view(), name="question_detail"),
     path('create-answer/<int:question_id>/<str:question_slug>/',
          views.AnswerCreateView.as_view(), name="create_answer"),
+    path('question/vote/', views.question_vote, name="question_vote"),
 ]
