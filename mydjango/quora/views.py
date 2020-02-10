@@ -80,6 +80,11 @@ class AnswerCreateView(LoginRequiredMixin, CreateView):
     template_name_suffix = '_create_form'
     template_name = 'quora/answer_create_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(AnswerCreateView, self).get_context_data()
+        context["question"] = Question.objects.get(pk=self.kwargs['question_id'])
+        return context  # 得返回啊！
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.question_id = self.kwargs['question_id']

@@ -1,18 +1,57 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static crispy_forms_tags humanize %}
 
 {% block title %}
     回答问题 | {{ block.super }}
 {% endblock %}
 
 {% block css %}
+    <link rel="stylesheet" href="{% static 'css/quora.css' %}">
 {% endblock %}
 
 
 {% block content %}
-    <div class="container">
-
+  <div class="container">
+    <div class="page-header">
+      <h4>{{ question.title }}
+        <a href="{% url 'quora:ask_question' %}" class="btn-sm btn-primary pull-right">
+          <i class="fa fa-pencil" aria-hidden="true"></i> 提问
+        </a>
+      </h4>
+      <hr/>
     </div>
+    <div class="row question" question-id="{{ question.id }}">
+      <div class="col-md-11">
+        <p>{{ question.get_markdown|safe }}</p>
+        <span class="question-user pull-left">
+              {% if question.tags.names %}
+                {% for tag in question.tags.names %}
+                  <span class="badge badge-primary">{{ tag }}</span>
+                {% endfor %}
+              {% endif %}
+            </span>
+        <span class="question-user pull-right">
+                <a href="{% url 'users:detail' question.user.username %}">{{ question.user.get_profile_name }} </a>
+                <span class="text-secondary"> {{ question.created_at|naturaltime }}提问</span>
+            </span>
+      </div>
+    </div>
+    <div class="page-header">
+      <hr/>
+      <h5>请在下面填写你的回答 </h5>
+      <hr/>
+    </div>
+    <form action="{% url 'quora:create_answer' view.kwargs.question_id view.kwargs.question_slug %}"
+          id="answerForm" method="post" role="form">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="form-group">
+        <button id="answer" type="submit" class="btn btn-primary">回答</button>
+        <a class="btn btn-light" style="float:right" href="{% url 'quora:all-questions' %}">取消</a>
+      </div>
+    </form>
+    {{ form.media }}
+  </div>
 {% endblock %}
 
 {% block modal %}
