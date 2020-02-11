@@ -14,4 +14,5 @@ urlpatterns = [
          views.AnswerCreateView.as_view(), name="create_answer"),
     path('question/vote/', views.question_vote, name="question_vote"),
     path('answer/vote/', views.answer_vote, name="answer_vote"),
+    path('accept-answer/', views.accept_answer, name="accept_answer"),
 ]

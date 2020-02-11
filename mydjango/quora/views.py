@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
@@ -132,3 +133,20 @@ def answer_vote(request):
         answer.votes.update_or_create(user=request.user, defaults={"value": value})
 
     return JsonResponse({"votes": answer.total_votes()})
+
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def accept_answer(request):
+    """
+    接受回答，AJAX POST请求
+    已经被接受的回答用户不能取消
+    """
+    answer_id = request.POST["answerId"]
+    answer = Answer.objects.get(pk=answer_id)
+    # 如果当前登录用户不是提问者，抛出权限拒绝错误
+    if answer.question.user.username != request.user.username:
+        raise PermissionDenied
+    answer.accept_answer()
+    return JsonResponse({"status": "true"})

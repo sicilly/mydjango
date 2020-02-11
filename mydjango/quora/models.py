@@ -147,14 +147,14 @@ class Answer(models.Model):
         dic = Counter(self.votes.values_list('value', flat=True))  # Counter赞同票多少，反对票少数
         return dic[True] - dic[False]
 
-    # def accept_answer(self):
-    #     """接受回答"""
-    #     # 当一个问题有多个回答的时候，只能采纳一个回答，其它回答一律置为未接受
-    #     answer_set = Answer.objects.filter(question=self.question)  # 查询当前问题的所有回答
-    #     answer_set.update(is_accepted=False)  # 一律置为未接受
-    #     # 接受当前回答并保存
-    #     self.is_accepted = True
-    #     self.save()
-    #     # 该问题已有被接受的回答，保存
-    #     self.question.has_correct = True
-    #     self.question.save()
+    def accept_answer(self):
+        """接受回答"""
+        # 当一个问题有多个回答的时候，只能采纳一个回答，其它回答一律置为未接受
+        answer_set = Answer.objects.filter(question=self.question)  # 查询当前问题的所有回答
+        answer_set.update(is_accepted=False)  # 一律置为未接受
+        # 接受当前回答并保存
+        self.is_accepted = True
+        self.save()
+        # 该问题已有被接受的回答，保存
+        self.question.has_correct = True
+        self.question.save()
