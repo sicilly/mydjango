@@ -114,3 +114,21 @@ def question_vote(request):
     else:
         question.votes.update_or_create(user=request.user, defaults={"value": value})
     return JsonResponse({"votes": question.total_votes()})  # 返回响应
+
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def answer_vote(request):
+    """给回答投票，AJAX POST请求"""
+    answer_id = request.POST["answerId"]  # 接收一个answerId
+    value = True if request.POST["value"] == 'U' else False  # 'U'表示赞，'D'表示踩
+    answer = Answer.objects.get(uuid_id=answer_id)
+    users = answer.votes.values_list('user', flat=True)  # 当前回答的所有投票用户
+
+    if request.user.pk in users and (answer.votes.get(user=request.user).value == value):
+        answer.votes.get(user=request.user).delete()
+    else:
+        answer.votes.update_or_create(user=request.user, defaults={"value": value})
+
+    return JsonResponse({"votes": answer.total_votes()})
