@@ -132,7 +132,7 @@ def answer_vote(request):
     else:
         answer.votes.update_or_create(user=request.user, defaults={"value": value})
 
-    return JsonResponse({"votes": answer.total_votes()})
+    return JsonResponse({"votes": answer.total_votes()})  # 字典转为json字符串作为响应
 
 
 @login_required

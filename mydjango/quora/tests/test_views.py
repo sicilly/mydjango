@@ -121,27 +121,27 @@ class TestAnswerCreateView(BaseQATest):
 
     def test_get(self):
         response = self.get(views.AnswerCreateView, request=self.request,
-                            question_id=self.question_one.id,
-                            question_slug=self.question_one.slug)
-        self.response_200(response)
-
+                            question_id=self.question_one.id,  # 传参id
+                            question_slug=self.question_one.slug)  # 传参slug
+        self.response_200(response)  # 状态码
+        # 表单
         self.assertContains(response, '编辑')
         self.assertContains(response, '预览')
+        # 实例
         self.assertIsInstance(response.context_data['view'], views.AnswerCreateView)
 
     def test_post(self):
-        data = {'content': 'content'}
-        request = RequestFactory().post('/fake-url', data=data)
-        request.user = self.user
+        data = {'content': 'content'}  # 准备数据
+        request = RequestFactory().post('/fake-url', data=data)  # 产生请求
+        request.user = self.user  # 登录
 
         # RequestFactory测试含有django.contrib.messages的视图 https://code.djangoproject.com/ticket/17971
         setattr(request, 'session', 'session')
         messages = FallbackStorage(request)
         setattr(request, '_messages', messages)
 
-        response = self.post(views.AnswerCreateView, request=request, question_id=self.question_one.pk,
-                             question_slug=self.question_one.slug)
-
+        response = self.post(views.AnswerCreateView, request=request, question_id=self.question_one.pk, question_slug=self.question_one.slug)  # 传参
+        # 重定向
         assert response.status_code == 302
         assert response.url == f'/quora/question/{self.question_one.pk}/{self.question_one.slug}/'
 
@@ -150,27 +150,28 @@ class TestQAVote(BaseQATest):
 
     def setUp(self):
         super(TestQAVote, self).setUp()
-        self.request = RequestFactory().post('/fake-url', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        # self.request是WSGI request对象
+        self.request = RequestFactory().post('/fake-url', HTTP_X_REQUESTED_WITH='XMLHttpRequest')  # 异步请求
         # QueryDict instance is immutable, request.POST是QueryDict对象，不可变
-        self.request.POST = self.request.POST.copy()
+        self.request.POST = self.request.POST.copy()  # 拷贝一份变成可变的对象
         self.request.user = self.other_user
 
     def test_question_upvote(self):
         """赞同问题"""
-        self.request.POST['questionId'] = self.question_one.pk
+        self.request.POST['questionId'] = self.question_one.pk  # 这里才可以给request.POST赋值
 
-        self.request.POST['value'] = 'U'
+        self.request.POST['value'] = 'U'  # 赞成
 
-        response = views.question_vote(self.request)
+        response = views.question_vote(self.request)  # 接收WSGI request对象
 
-        assert response.status_code == 200
+        assert response.status_code == 200  # 响应状态码
         assert json.loads(response.content)['votes'] == 1
 
     def test_question_downvote(self):
         """反对问题"""
         self.request.POST['questionId'] = self.question_one.pk
 
-        self.request.POST['value'] = 'D'
+        self.request.POST['value'] = 'D'  # 反对
 
         response = views.question_vote(self.request)
 
