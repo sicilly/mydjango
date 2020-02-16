@@ -59,7 +59,7 @@
               <a class="nav-link" href="{% url 'quora:all-questions' %}">有问有答</a>
             </li>
             <li class="nav-item" id="chat">
-              <a class="nav-link" href="{% url 'chat' %}">在线畅聊</a>
+              <a class="nav-link" href="{% url 'chat:index' %}">在线畅聊</a>
             </li>
             {% if request.user.is_authenticated %}
 

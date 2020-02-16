@@ -12,7 +12,7 @@ urlpatterns = [
 
 
     # path("quora/", TemplateView.as_view(template_name="pages/quora.html"), name="quora"),
-    path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
+    # path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
 
@@ -29,6 +29,7 @@ urlpatterns = [
     path("news/", include("mydjango.news.urls", namespace="news")),
     path("blogs/", include("mydjango.blogs.urls", namespace="blogs")),
     path("quora/", include("mydjango.quora.urls", namespace="quora")),
+    path("chat/", include("mydjango.chat.urls", namespace="chat")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
