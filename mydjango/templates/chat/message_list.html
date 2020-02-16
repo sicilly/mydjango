@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static thumbnail %}
+
+{% block title %}私信 - {{ block.super }}{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/chat.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h4>{{ request.user.get_profile_name }}的聊天记录</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            {% for user in users_list %}
+                <a href="{% url 'chat:conversation_detail' user.username %}"
+                   class="list-group-item list-group-item-action
+                    {% ifequal user.username active_user%}active{% endifequal %}">
+                    {% thumbnail user.avatar "x45" as im %}
+                        <img src="{{ im.url }}" alt="用户头像">
+                        {% empty %}
+                        <img src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
+                    {% endthumbnail %}
+                    {{ user.get_profile_name }}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="col-md-9">
+            <div class="messages-list">
+                {% if message_list %}
+                    {% for message in message_list %}
+                        {% include 'chat/message_single.html' with message=message %}
+                    {% endfor %}
+                {% else %}
+                    <p>没有聊天记录</p>
+                {% endif %}
+                <li class="send-message"></li>
+            </div>
+            <hr>
+            <div class="chat-box">
+                <form role="form" method="post" action="#" id="send">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        <input type="hidden" name="to" value="{{ active_user }}">
+                        <input class="form-control" type="text" name="msgcontent" placeholder="发送消息" autocomplete="off">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascript %}
+{#    <script type="text/javascript">#}
+{#        const active_user = "{{ active_user }}";#}
+{#        window.onload = $('.messages-list').scrollTop($('.messages-list')[0].scrollHeight);#}
+{#    </script>#}
+{##}
+{#    <script src="{% static 'js/reconnecting-websocket.js' %}" type="text/javascript"></script>#}
+{#    <script src="{% static 'js/chat.js' %}" type="text/javascript"></script>#}
+{% endblock %}

@@ -8,7 +8,7 @@ from mydjango.chat.models import Message
 
 class MessagesListView(LoginRequiredMixin, ListView):
     model = Message
-    # context_object_name = 'message_list'
+    context_object_name = 'message_list'  # 模板中用到
     template_name = "chat/message_list.html"
 
     def get_queryset(self):
@@ -21,7 +21,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MessagesListView, self).get_context_data()
         # 获取除当前登录用户外的前10个用户，按最近登录时间降序排列
-        context["user_list"] = get_user_model().objects.filter(is_active=True).exclude(username=self.request.user.username).order_by('-last_login')[0:10]
+        context["users_list"] = get_user_model().objects.filter(is_active=True).exclude(username=self.request.user.username).order_by('-last_login')[0:10]
 
         # 最近一次私信互动的用户
         last_conversation_user = Message.objects.get_most_recent_conversation_user(self.request.user)

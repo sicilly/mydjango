@@ -1,0 +1,36 @@
+{% load static humanize thumbnail %}
+
+
+{% ifequal message.sender.username request.user.username %}
+    <li class="media">
+        <div class="media-body" style="text-align: right">
+            <b class="mt-0 mb-1"><small>{{ message.created_at|date:'Y-m-d H:i:s' }} - </small>
+                <a href="{% url 'users:detail' message.sender.username %}">{{ message.sender.get_profile_name }}</a>
+            </b>
+            <div>
+                {{ message.message }}
+            </div>
+        </div>
+        {% thumbnail message.sender.avatar "x45" as im %}
+            <img class="ml-3" src="{{ im.url }}" alt="用户头像">
+        {% empty %}
+            <img class="ml-3" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
+        {% endthumbnail %}
+    </li>
+{% else %}
+    <li>
+        {% thumbnail message.sender.avatar "x45" as im %}
+            <img class="picture" src="{{ im.url }}" alt="用户头像">
+        {% empty %}
+            <img class="picture" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
+        {% endthumbnail %}
+        <div>
+            <b>
+                <a href="{% url 'users:detail' message.sender.username %}">{{ message.sender.get_profile_name }}</a>
+            </b>
+            <small> - {{ message.created_at|date:'Y-m-d H:i:s' }}</small>
+            <br>
+            {{ message.message }}
+        </div>
+    </li>
+{% endifequal %}
