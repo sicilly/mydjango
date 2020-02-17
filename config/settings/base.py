@@ -341,6 +341,10 @@ MDEDITOR_CONFIGS = {
     }
 
 }
+
+# ASGI_server_setup
+ASGI_APPLICATION = 'config.routing.application'
+
 # 频道层缓存
 CHANNEL_LAYERS = {
     "default": {
