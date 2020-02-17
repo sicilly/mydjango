@@ -1,9 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 
 from mydjango.chat.models import Message
+from mydjango.myutils import ajax_required
 
 
 class MessagesListView(LoginRequiredMixin, ListView):
@@ -39,3 +43,29 @@ class ConversationListView(MessagesListView):
         context = super(ConversationListView, self).get_context_data()
         context['active_user'] = self.kwargs['username']
         return context
+
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def send_message(request):
+    """发送消息，AJAX POST请求"""
+    sender = request.user  # 发送者是当前登录用户
+    reciever_username = request.POST['to']
+    reciever = get_user_model().objects.get(username=reciever_username)
+    msgcontent = request.POST['msgcontent']
+    if len(msgcontent.strip()) != 0 and sender != reciever:
+        msg = Message.objects.create(sender=sender, reciever=reciever, message=msgcontent)
+
+        return render(request, 'chat/message_single.html', {'message': msg})
+    return HttpResponse()
+
+
+# @login_required
+# @ajax_required
+# @require_http_methods(["GET"])
+# def send_message(request):
+#     """接收消息，AJAX GET请求"""
+#     message_id = request.GET('message_id')
+#     msg = Message.objects.get(pk=message_id)
+#     return render(request, 'chat/message_single.html', {'message': msg})
