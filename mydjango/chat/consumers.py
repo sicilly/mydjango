@@ -3,7 +3,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
-class MessageConsumer(AsyncWebsocketConsumer):
+class MessagesConsumer(AsyncWebsocketConsumer):
     """处理聊天应用中的WebSocket请求"""
     async def connect(self):
         if self.scope['user'].is_anonymous:

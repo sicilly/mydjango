@@ -1,8 +1,11 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 
@@ -56,7 +59,14 @@ def send_message(request):
     msgcontent = request.POST['msgcontent']
     if len(msgcontent.strip()) != 0 and sender != reciever:
         msg = Message.objects.create(sender=sender, reciever=reciever, message=msgcontent)
-
+        channel_layer = get_channel_layer()
+        payload = {
+            'type': 'receive',
+            'message': render_to_string('chat/message_single.html', {'message': msg}),
+            'sender': sender.username,
+        }
+        # 异步变同步
+        async_to_sync(channel_layer.group_send)(reciever.username, payload)
         return render(request, 'chat/message_single.html', {'message': msg})
     return HttpResponse()
 
