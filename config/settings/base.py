@@ -68,6 +68,7 @@ DJANGO_APPS = [
     "django.forms",  # 用于后面重写django内置的widget模板
 ]
 THIRD_PARTY_APPS = [
+    'channels',
     "crispy_forms",
     "allauth",
     "allauth.account",
@@ -339,4 +340,13 @@ MDEDITOR_CONFIGS = {
         'sequence': True  # Whether to open the sequence diagram function
     }
 
+}
+# 频道层缓存
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [f'{env("REDIS_URL",default="redis://192.168.0.104:6379")}/3', ],  # channel layers缓存使用Redis3
+        },
+    },
 }
