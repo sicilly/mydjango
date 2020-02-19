@@ -55,10 +55,10 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        {#const active_user = "{{ active_user }}";#}
+        const active_user = "{{ active_user }}";
         window.onload = $('.messages-list').scrollTop($('.messages-list')[0].scrollHeight);
     </script>
 
-{#    <script src="{% static 'js/reconnecting-websocket.js' %}" type="text/javascript"></script>#}
+    <script src="{% static 'js/reconnecting-websocket.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/chat.js' %}" type="text/javascript"></script>
 {% endblock %}

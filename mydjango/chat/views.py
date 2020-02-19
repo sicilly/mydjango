@@ -66,16 +66,7 @@ def send_message(request):
             'sender': sender.username,
         }
         # 异步变同步
+        # group_send(group: 所在组-接收者的username, message: 消息内容)
         async_to_sync(channel_layer.group_send)(reciever.username, payload)
         return render(request, 'chat/message_single.html', {'message': msg})
     return HttpResponse()
-
-
-# @login_required
-# @ajax_required
-# @require_http_methods(["GET"])
-# def send_message(request):
-#     """接收消息，AJAX GET请求"""
-#     message_id = request.GET('message_id')
-#     msg = Message.objects.get(pk=message_id)
-#     return render(request, 'chat/message_single.html', {'message': msg})

@@ -19,3 +19,4 @@ class MessagesConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, code):
         """离开聊天组"""
         await self.channel_layer.group_discard(self.scope['user'].username, self.channel_name)
+
