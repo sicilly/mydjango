@@ -69,6 +69,8 @@ class Notification(models.Model):
     object_id = models.CharField(max_length=255)  # 关联到整形和非整形的逐渐上，用CharField
     action_object = GenericForeignKey('content_type', 'object_id')  # 等同于GenericForeignKey()
 
+    objects = NotificationQuerySet.as_manager()
+
     class Meta:
         verbose_name = "通知"
         verbose_name_plural = verbose_name
