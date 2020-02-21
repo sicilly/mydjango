@@ -30,6 +30,7 @@ urlpatterns = [
     path("blogs/", include("mydjango.blogs.urls", namespace="blogs")),
     path("quora/", include("mydjango.quora.urls", namespace="quora")),
     path("chat/", include("mydjango.chat.urls", namespace="chat")),
+    path("notifications/", include("mydjango.notifications.urls", namespace="notifications")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
