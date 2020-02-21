@@ -3,8 +3,43 @@ import uuid
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core import serializers
 from django.db import models
 from slugify import slugify
+
+
+class NotificationQuerySet(models.query.QuerySet):
+    def unread(self):
+        return self.filter(unread=True)
+
+    def read(self):
+        return self.filter(unread=False)
+
+    def mark_all_as_read(self, recipient=None):
+        """标记已读，可以传入接收者参数"""
+        qs = self.unread()
+        if recipient:
+            qs = qs.filter(recipient=recipient)
+        return qs.update(unread=False)
+
+    def mark_all_as_unread(self, recipient=None):
+        """标为未读，可以传入接收者参数"""
+        qs = self.read()
+        if recipient:
+            qs = qs.filter(recipient=recipient)
+        return qs.update(unread=True)
+
+    def get_most_recent(self, recipient=None):
+        qs = self.unread()[:5]
+        if recipient:
+            qs = qs.filter(recipient=recipient)[:5]
+        return qs
+
+    def serialize_latest_notifications(self, recipient=None):
+        """序列化最近5条未读通知，可以传入接收者参数"""
+        qs = self.get_most_recent(recipient)
+        notification_dic = serializers.serialize('json', qs)
+        return notification_dic
 
 
 class Notification(models.Model):
