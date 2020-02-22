@@ -29,7 +29,7 @@
 
         <a type="button" class="btn-sm btn-dark text-center" href="{% url 'notifications:unread' %}">查看所有</a>
         <a type="button" class="btn-sm btn-dark text-center"
-           href="#">全部标为已读</a>
+           href="{% url 'notifications:mark_all_read' %}">全部标为已读</a>
 
     {% else %}
         <li class="text-center">没有未读通知</li>

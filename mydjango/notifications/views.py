@@ -1,6 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 
 from mydjango.notifications.models import Notification
@@ -22,3 +23,32 @@ def get_latest_notifications(request):
     notifications = request.user.notifications.get_most_recent()
     return render(request, 'notifications/most_recent.html',
                   {'notifications': notifications})
+
+
+@login_required()
+def mark_all_as_read(request):
+    """将所有通知标为已读"""
+    request.user.notifications.mark_all_as_read()
+    redirect_url = request.GET.get('next')
+
+    messages.add_message(request, messages.SUCCESS, f'用户{request.user.username}的所有通知标为已读')
+
+    if redirect_url:
+        return redirect(redirect_url)
+
+    return redirect('notifications:unread')
+
+
+@login_required()
+def mark_as_read(request, slug):
+    """根据slug标为已读"""
+    notification = get_object_or_404(Notification, slug=slug)
+    notification.mark_as_read()
+
+    redirect_url = request.GET.get('next')
+    messages.add_message(request, messages.SUCCESS, f'通知{notification}标为已读')
+
+    if redirect_url:
+        return redirect(redirect_url)
+
+    return redirect('notifications:unread')
