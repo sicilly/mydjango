@@ -56,4 +56,39 @@ $(function () {
         return false;  // 不是False
     });
 
+    // WebSocket连接，使用wss(https)或者ws(http)
+    const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+    const ws_path = ws_scheme + "://" + window.location.host + "/ws/notification";
+    // 新建WebSocket实例
+    const ws = new ReconnectingWebSocket(ws_path);
+
+    // 监听后端发送过来的消息
+    ws.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        switch (data.key) {
+            case "notification":
+                if (currentUser !== data.actor_name) {  // 消息提示的发起者不提示
+                    notice.addClass('btn-danger');
+                }
+                break;
+
+            case "social_update":
+                if (currentUser !== data.actor_name) {
+                    notice.addClass('btn-danger');
+                    update_social_activity(data.id_value);
+                }
+                break;
+
+            case "additional_news":
+                if (currentUser !== data.actor_name) {
+                    // notice.addClass('btn-danger');
+                    $('.stream-update').show();
+                }
+                break;
+
+            default:
+                console.log('error', data);
+                break;
+        }
+    };
 });
