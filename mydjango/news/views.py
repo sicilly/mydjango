@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DeleteView
-
 from mydjango.news.models import News
 from mydjango.myutils import ajax_required, AuthorRequiredMixin
 

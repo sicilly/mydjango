@@ -2,9 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django_comments.signals import comment_was_posted
 from mydjango.blogs.models import Article, ArticleCategory
-from blogs.form import ArticleForm
-from myutils import AuthorRequiredMixin
+from mydjango.blogs.form import ArticleForm
+from mydjango.myutils import AuthorRequiredMixin
+from mydjango.notifications.views import notification_handler
 
 
 class ArticleListView(ListView):
@@ -75,3 +77,15 @@ class ArticleUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         message = "您的文章已更新成功！"  # Django框架中的消息闪现机制
         messages.success(self.request, message)  # 消息传递给下一次请求
         return reverse_lazy('blogs:detail', kwargs={'slug': self.get_object().slug})  # 传入路由的关键字参数
+
+
+def notify_comment(**kwargs):
+    """文章有评论时通知作者"""
+    actor = kwargs['request'].user          # 动作的执行者
+    obj = kwargs['comment'].content_object  # 动作的对象
+
+    notification_handler(actor, obj.user, 'C', obj)
+
+
+comment_was_posted.connect(receiver=notify_comment)  # 评论被提交后执行notify_comment
+
