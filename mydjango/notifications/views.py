@@ -56,7 +56,7 @@ def mark_as_read(request, slug):
     return redirect('notifications:unread')
 
 
-def notification_headler(actor, recipient, verb, action_object, **kwargs):
+def notification_handler(actor, recipient, verb, action_object, **kwargs):
     """
     通知处理器
     :param actor:           request.user对象

@@ -85,3 +85,11 @@ def get_replies(request):
         "newsid": news_id,
         "replies_html": replies_html,
     })
+
+
+@login_required
+def update_interactions(request):
+    """更新互动信息"""
+    data_point = request.GET['id_value']
+    news = News.objects.get(pk=data_point)
+    return JsonResponse({'likes': news.likers_count(), 'replies': news.replies_count()})

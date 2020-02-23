@@ -5,6 +5,8 @@ from channels.layers import get_channel_layer
 from django.conf import settings
 from django.db import models
 
+from mydjango.notifications.views import notification_handler
+
 
 class News(models.Model):
     # 新闻动态类
@@ -35,6 +37,8 @@ class News(models.Model):
             self.likers.remove(user)  # 用户在已经在self.likers的集合里，就要把user移除
         else:
             self.likers.add(user)  # 如果用户没有点赞，那么就把他添加进来
+            # 通知楼主
+            notification_handler(user, self.user, "L", self, id_value=str(self.uuid_id), key="social_update")
 
     def get_parent(self):
         """返回自关联中的上级记录或者本身"""
@@ -62,6 +66,7 @@ class News(models.Model):
             reply=True,
             parent=parent
         )
+        notification_handler(user, parent.user, "R", parent, id_value=str(parent.uuid_id), key="social_update")
 
     def likers_count(self):
         """点赞数"""
