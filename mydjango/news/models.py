@@ -1,5 +1,7 @@
 import uuid
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.conf import settings
 from django.db import models
 
@@ -72,3 +74,16 @@ class News(models.Model):
     def replies_count(self):
         """评论数量"""
         return self.get_children().count()
+
+    def save(self, *args, **kwargs):
+        super(News, self).save(*args, **kwargs)
+
+        if not self.reply:
+            channel_layer = get_channel_layer()
+            payload = {
+                "type": "receive",
+                "key": "additional_news",
+                "actor_name": self.user.username
+            }
+            async_to_sync(channel_layer.group_send)('notifications', payload)
+

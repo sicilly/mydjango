@@ -7,12 +7,17 @@
 {% endblock %}
 
 {% block css %}
+   <link href="{% static 'css/news.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
     <div class="my-4"></div>
     <div class="row">
         <div class="col-md-8">
+        <!-- 有新的动态时 -->
+        <div class="stream-update">
+          <a href="{% url 'news:list' %}"><span class="new-posts">您有新的动态</span></a>
+        </div>
             <ul class="stream">
                 {% for news_item in news_list %}
                     {% include 'news/news_single.html' with news=news_item %}
