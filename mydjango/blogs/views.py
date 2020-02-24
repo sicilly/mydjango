@@ -89,3 +89,5 @@ def notify_comment(**kwargs):
 
 comment_was_posted.connect(receiver=notify_comment)  # 评论被提交后执行notify_comment
 
+# from django_comments.models import Comment
+# Comment

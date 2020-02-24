@@ -9,6 +9,8 @@ from markdownx.utils import markdownify
 from slugify import slugify
 from taggit.managers import TaggableManager
 
+from mydjango.notifications.views import notification_handler
+
 
 class Vote(models.Model):
     """使用Django中的ContentType, 同时关联用户对问题和回答的投票"""
@@ -130,6 +132,14 @@ class Answer(models.Model):
     def __str__(self):
         return self.content
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None, is_notify=True):
+        super(Answer, self).save()
+        # 避免二次通知
+        if is_notify:
+            # 通知提问者
+            notification_handler(self.user, self.question.user, 'A', self.question)
+
     def get_markdown(self):
         return markdownify(self.content)
 
@@ -154,7 +164,7 @@ class Answer(models.Model):
         answer_set.update(is_accepted=False)  # 一律置为未接受
         # 接受当前回答并保存
         self.is_accepted = True
-        self.save()
+        self.save(is_notify=False)
         # 该问题已有被接受的回答，保存
         self.question.has_correct = True
         self.question.save()

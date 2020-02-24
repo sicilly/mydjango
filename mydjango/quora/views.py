@@ -10,6 +10,7 @@ from django.views.generic import ListView, CreateView, DetailView
 from mydjango.quora.models import Question, Answer
 from mydjango.quora.forms import QuestionForm
 from mydjango.myutils import ajax_required
+from mydjango.notifications.views import notification_handler
 
 
 class QuestionListView(ListView):
@@ -149,4 +150,6 @@ def accept_answer(request):
     if answer.question.user.username != request.user.username:
         raise PermissionDenied
     answer.accept_answer()
+    # 通知回答者
+    notification_handler(answer.question.user, answer.user, 'W', answer)
     return JsonResponse({"status": "true"})
