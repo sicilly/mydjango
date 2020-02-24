@@ -50,6 +50,7 @@ class Notification(models.Model):
         ('A', '回答了'),  # answer
         ('W', '接受了回答'),  # accept
         ('R', '回复了'),  # reply
+        ('M', '私信了'),  # message
         ('I', '登录'),  # logged in
         ('O', '退出'),  # logged out
     )

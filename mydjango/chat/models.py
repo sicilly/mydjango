@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from django.conf import settings
+from mydjango.notifications.views import notification_handler
 
 
 # 自定义查询管理集
@@ -56,3 +57,9 @@ class Message(models.Model):
         if self.unread:
             self.unread = False  # 置为已读
             self.save()
+
+    def save(self, force_insert=False, force_update=False, using=None,
+                 update_fields=None):
+        super(Message, self).save()
+        # 通知被私信者
+        notification_handler(self.sender, self.reciever, 'M', self)

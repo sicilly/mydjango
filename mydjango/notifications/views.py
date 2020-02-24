@@ -66,7 +66,8 @@ def notification_handler(actor, recipient, verb, action_object, **kwargs):
     :param kwargs           key, id_value等
     :return:                None
     """
-    if actor.username != recipient.username and recipient.username == action_object.user.username:
+    # if actor.username != recipient.username and recipient.username == action_object.user.username:
+    if actor.username != recipient.username:
         # 只通知接收者，即recipient == 动作对象的作者
         key = kwargs.get('key', 'notification')
         id_value = kwargs.get('id_value', None)
