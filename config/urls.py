@@ -20,6 +20,7 @@ urlpatterns = [
     re_path(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'^comments/', include('django_comments.urls')),
     path('markdownx/', include('markdownx.urls')),
+    path('search/', include('haystack.urls')),
 
     # User management 用户管理
     path("users/", include("mydjango.users.urls", namespace="users")),

@@ -79,6 +79,7 @@ THIRD_PARTY_APPS = [
     'mdeditor',        # md编辑器
     'markdownx',       # MarkdownX
     'django_comments',  # 评论
+    'haystack',
 ]
 
 LOCAL_APPS = [
@@ -88,6 +89,7 @@ LOCAL_APPS = [
     "mydjango.quora.apps.QuoraConfig",  # 有问有答
     "mydjango.chat.apps.ChatConfig",    # 在线畅聊
     "mydjango.notifications.apps.NotificationsConfig",    # 消息通知
+    "mydjango.search.apps.SearchConfig",    # 搜索
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -355,3 +357,17 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'mydjango',
+    },
+}
+
+HAYSTACK_SEARCH_RESULT_PER_PAGE = 20  # 分页
+
+# 实时信号量处理器，模型类中数据增加、更新、删除时自动更新索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
