@@ -1,0 +1,29 @@
+{% load thumbnail static humanize %}
+
+<li class="media mb-4">
+    <a href="{% url 'blogs:detail' article.slug %}">
+        {% thumbnail article.cover "280x400" as im %}
+            <img height="140" width="220" src="{{ im.url }}" class="mr-3" alt="文章图片">
+        {% empty %}
+            <img height="140" width="220" src="http://placehold.it/1920x1080" class="mr-3"
+                 alt="图片大小">
+        {% endthumbnail %}
+    </a>
+    <div class="media-body">
+        <h5 class="mt-0 mb-1">
+            {{ article.title }}
+        </h5>
+        <p style="font-size: small">
+            {{ article.abstract|safe|truncatechars:80 }}
+        </p>
+        <div>标签：
+            {% for tag in article.tags.names %}
+                <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+            {% endfor %}
+        </div>
+        <div class="text-muted">
+            <a href="{% url 'users:detail' article.user.username %}">{{ article.user.get_profile_name }}</a>
+            发表于 {{ article.created_at|date:"SHORT_DATE_FORMAT" }}
+        </div>
+    </div>
+</li>

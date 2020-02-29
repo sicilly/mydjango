@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static humanize thumbnail %}
+
+{% block title %}搜索 - {{ block.super }} {% endblock %}
+
+{% block content %}
+
+  <!-- Page Content -->
+  <div class="container">
+    <!-- row -->
+    <div class="row">
+      <div class="col-3">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active" id="list-articles-list" data-toggle="list" href="#list-articles" role="tab"
+             aria-controls="list-articles" aria-selected="true">文章</a>
+          <a class="nav-link" id="list-news-list" data-toggle="list" href="#list-news" role="tab"
+             aria-controls="list-news" aria-selected="false">新闻</a>
+          <a class="nav-link" id="list-questions-list" data-toggle="list" href="#list-questions" role="tab"
+             aria-controls="list-questions" aria-selected="false">问题</a>
+          <a class="nav-link" id="list-users-list" data-toggle="list" href="#list-users" role="tab"
+             aria-controls="list-users" aria-selected="false">用户</a>
+          <a class="nav-link" id="list-tags-list" data-toggle="list" href="#list-tags" role="tab"
+             aria-controls="list-tags" aria-selected="false">标签</a>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="list-articles" role="tabpanel"
+               aria-labelledby="list-articles-list">
+          {% for result in page.object_list %}
+               {% if result.app_label == "blogs" %}
+                   {% include 'blogs/article_single.html' with article=result.object %}
+               {% endif %}
+          {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-news" role="tabpanel" aria-labelledby="list-news-list">
+          {% for result in page.object_list %}
+               {% if result.app_label == "news" %}
+                    {% include 'news/news_single.html' with news=result.object %}
+               {% endif %}
+          {% endfor %}
+          </div>
+
+          <div class="tab-pane fade" id="list-questions" role="tabpanel" aria-labelledby="list-questions-list">
+            {% for result in page.object_list %}
+              {% if result.app_label == "quora" %}
+                 {% include 'quora/question_single.html' with question=result.object %}
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-users" role="tabpanel" aria-labelledby="list-users-list">
+            {% for result in page.object_list %}
+              {% if result.app_label == "users" %}
+                <div class="row">
+                  <div class="col-md-9">
+                    <a href="{% url 'users:detail' result.object.username %}">
+                      {% thumbnail result.object.avatar "x75" as im %}
+                        <img src="{{ im.url }}" alt="用户头像" id="pic">
+                      {% empty %}
+                        <img src="{% static 'images/user.png' %}" height="75px" alt="没有头像"/>
+                      {% endthumbnail %}
+                    </a>
+                  </div>
+                  <div class="col-md-3">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <a class="email"
+                       href="mailto:{{ result.object.email }}">  {{ result.object.get_profile_name }}<br/></a>
+                    {% if result.object.job %}
+                      <i class="fa fa-briefcase" aria-hidden="true"></i>
+                      <i>  {{ result.object.job }}<br/></i>
+                    {% endif %}
+                    {% if result.object.address %}
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                      <i>  {{ result.object.address }}</i>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-tags" role="tabpanel" aria-labelledby="list-tags-list">
+            {% for result in page.object_list %}
+              {% if result.app_label == "taggit" %}
+                <div class="card my-4">
+                  <div class="card-body">
+                    <a href="#"><span class="badge badge-info">{{ result.object.name }}</span></a>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+
+{% endblock content %}
