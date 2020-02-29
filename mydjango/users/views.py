@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
 from mydjango.blogs.models import Article
+from mydjango.news.models import News
 
 User = get_user_model()
 
@@ -22,6 +23,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data()
         context["articles_count"] = Article.objects.get_by_user(self.request.user).count()
+        context["news_count"] = News.objects.filter(user=self.request.user, reply=False).count()
         return context
 
 
@@ -37,7 +39,17 @@ class UserArticlesDetailView(UserDetailView):
         return context
 
 
+# 用户的新闻动态
+class UserNewsDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserNewsDetailView, self).get_context_data()
+        context["news"] = News.objects.filter(user=self.request.user, reply=False).order_by('-updated_at')
+        context["active"] = 'news'
+        return context
+
+
 user_articles_detail_view = UserArticlesDetailView.as_view()
+user_news_detail_view = UserNewsDetailView.as_view()
 
 
 # 更新视图

@@ -63,8 +63,10 @@
       <div class="row mt-3">
         <div class="col-md-2">
           <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="{% url 'users:user_news' user.username %}"
+               class="list-group-item list-group-item-action {% ifequal active 'news'%}active{% endifequal %}">
               我的新闻动态
+              <span class="badge badge-dark badge-pill">{{ news_count }}</span>
             </a>
             <a href="{% url 'users:user_articles' user.username %}"
                class="list-group-item list-group-item-action {% ifequal active 'articles'%}active{% endifequal %}">
@@ -81,9 +83,17 @@
         </div>
         <div class="col-md-10">
           <ul class="list-unstyled">
+            {% if news %}
+              {% for item in news %}
+                {% include 'news/news_single.html' with news=item %}
+              {% endfor %}
+            {% endif %}
+          {% if articles %}
             {% for item in articles %}
               {% include 'blogs/article_single.html' with article=item %}
             {% endfor %}
+          {% endif %}
+
           </ul>
         </div>
       </div>
