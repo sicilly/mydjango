@@ -60,7 +60,32 @@
             </div>
         </div>
 
-
+      <div class="row mt-3">
+        <div class="col-md-2">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action">
+              我的新闻动态
+            </a>
+            <a href="{% url 'users:user_articles' user.username %}"
+               class="list-group-item list-group-item-action {% ifequal active 'articles'%}active{% endifequal %}">
+              我的博客文章
+            <span class="badge badge-dark badge-pill">{{ articles_count }}</span>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              我提出的问题
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              我给出的回答
+            </a>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <ul class="list-unstyled">
+            {% for item in articles %}
+              {% include 'blogs/article_single.html' with article=item %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
 {% endblock content %}
-

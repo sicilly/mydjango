@@ -33,6 +33,10 @@ class ArticleQuerySet(models.query.QuerySet):  # 继承查询集父类
         """返回草稿箱的文章"""
         return self.filter(status="D").order_by('-updated_at')
 
+    def get_by_user(self, user):
+        """返回已发表+草稿箱的文章"""
+        return self.filter(user=user).order_by('-updated_at')
+
     def get_counted_tags(self):
         """统计所有已发布的文章中，每一个标签的数量(大于0的)"""
         tag_dict = {}

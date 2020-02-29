@@ -5,6 +5,8 @@ from django.views.generic import DetailView, RedirectView, UpdateView
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
+from mydjango.blogs.models import Article
+
 User = get_user_model()
 
 
@@ -17,8 +19,25 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     # pk_url_kwarg = 'pk' # 也可以用主键来查询，默认是pk
     template_name = 'users/user_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data()
+        context["articles_count"] = Article.objects.get_by_user(self.request.user).count()
+        return context
+
 
 user_detail_view = UserDetailView.as_view()
+
+
+# 用户的博客文章
+class UserArticlesDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserArticlesDetailView, self).get_context_data()
+        context["articles"] = Article.objects.get_by_user(self.request.user)
+        context["active"] = 'articles'
+        return context
+
+
+user_articles_detail_view = UserArticlesDetailView.as_view()
 
 
 # 更新视图
