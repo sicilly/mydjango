@@ -3,6 +3,10 @@
 
 {% block title %}{{ user.username }} | {{ block.super }}{% endblock %}
 
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/quora.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
 
@@ -71,13 +75,15 @@
             <a href="{% url 'users:user_articles' user.username %}"
                class="list-group-item list-group-item-action {% ifequal active 'articles'%}active{% endifequal %}">
               我的博客文章
-            <span class="badge badge-dark badge-pill">{{ articles_count }}</span>
+              <span class="badge badge-dark badge-pill">{{ articles_count }}</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="{% url 'users:user_questions' user.username %}" class="list-group-item list-group-item-action {% ifequal active 'questions'%}active{% endifequal %}">
               我提出的问题
+              <span class="badge badge-dark badge-pill">{{ questions_count }}</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="{% url 'users:user_answers' user.username %}" class="list-group-item list-group-item-action {% ifequal active 'answers'%}active{% endifequal %}">
               我给出的回答
+              <span class="badge badge-dark badge-pill">{{ answers_count }}</span>
             </a>
           </div>
         </div>
@@ -88,11 +94,21 @@
                 {% include 'news/news_single.html' with news=item %}
               {% endfor %}
             {% endif %}
-          {% if articles %}
-            {% for item in articles %}
-              {% include 'blogs/article_single.html' with article=item %}
-            {% endfor %}
-          {% endif %}
+            {% if articles %}
+              {% for item in articles %}
+                {% include 'blogs/article_single.html' with article=item %}
+              {% endfor %}
+            {% endif %}
+            {% if questions %}
+              {% for item in questions %}
+                {% include 'quora/question_single.html' with question=item %}
+              {% endfor %}
+            {% endif %}
+            {% if answers %}
+              {% for item in answers %}
+                {% include 'quora/answer_single.html' with answer=item %}
+              {% endfor %}
+            {% endif %}
 
           </ul>
         </div>

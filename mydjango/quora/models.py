@@ -52,6 +52,10 @@ class QuestionQuerySet(models.query.QuerySet):
                     tag_dict[tag] += 1
         return tag_dict.items()  # 返回的是键值对
 
+    def get_questions_by_user(self, user):
+        """获取指定用户的所有问题"""
+        return self.filter(user=user).order_by('-updated_at')
+
 
 class Question(models.Model):
     STATUS = (("O", "Open"), ("C", "Close"), ("D", "Draft"))

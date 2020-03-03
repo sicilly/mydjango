@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from mydjango.blogs.models import Article
 from mydjango.news.models import News
+from mydjango.quora.models import Question, Answer
 
 User = get_user_model()
 
@@ -24,6 +25,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context = super(UserDetailView, self).get_context_data()
         context["articles_count"] = Article.objects.get_by_user(self.request.user).count()
         context["news_count"] = News.objects.filter(user=self.request.user, reply=False).count()
+        context["questions_count"] = Question.objects.get_questions_by_user(self.request.user).count()
+        context["answers_count"] = Answer.objects.filter(user=self.request.user).count()
         return context
 
 
@@ -48,8 +51,28 @@ class UserNewsDetailView(UserDetailView):
         return context
 
 
+# 用户的问题
+class UserQuestionsDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserQuestionsDetailView, self).get_context_data()
+        context["questions"] = Question.objects.get_questions_by_user(self.request.user)
+        context["active"] = 'questions'
+        return context
+
+
+# 用户的回答
+class UserAnswersDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserAnswersDetailView, self).get_context_data()
+        context["answers"] = Answer.objects.filter(user=self.request.user)
+        context["active"] = 'answers'
+        return context
+
+
 user_articles_detail_view = UserArticlesDetailView.as_view()
 user_news_detail_view = UserNewsDetailView.as_view()
+user_questions_detail_view = UserQuestionsDetailView.as_view()
+user_answers_detail_view = UserAnswersDetailView.as_view()
 
 
 # 更新视图
