@@ -345,6 +345,14 @@ MDEDITOR_CONFIGS = {
 
 }
 
+MARKDOWNX_UPLOAD_CONTENT_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
+MARKDOWNX_IMAGE_MAX_SIZE = {
+    'size': (500, 500),
+    'quality': 100
+}
+# markdowx上传图片大小限制： 5M
+MARKDOWNX_UPLOAD_MAX_SIZE = 50*1024*1024
+
 # ASGI_server_setup
 ASGI_APPLICATION = 'config.routing.application'
 
