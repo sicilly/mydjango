@@ -39,13 +39,21 @@ INSTALLED_APPS += ["debug_toolbar"]  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+# DEBUG_TOOLBAR_CONFIG = {
+#     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+#     "SHOW_TEMPLATE_CONTEXT": True,
+# }
 DEBUG_TOOLBAR_CONFIG = {
-    "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-    "SHOW_TEMPLATE_CONTEXT": True,
-}
+        'JQUERY_URL': '//cdn.bootcss.com/jquery/2.1.4/jquery.min.js',
+        # 或把jquery下载到本地然后取消下面这句的注释, 并把上面那句删除或注释掉
+        #'JQUERY_URL': '/static/jquery/2.1.4/jquery.min.js',
+        'SHOW_COLLAPSED': True,
+        'SHOW_TOOLBAR_CALLBACK': lambda x: True,
+        "SHOW_TEMPLATE_CONTEXT": True,
+        'SQL_WARNING_THRESHOLD': 1,   # milliseconds
+    }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "192.168.0.107"]
 
 # django-extensions
 # ------------------------------------------------------------------------------
