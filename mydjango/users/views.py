@@ -23,10 +23,11 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data()
-        context["articles_count"] = Article.objects.get_by_user(self.request.user).count()
-        context["news_count"] = News.objects.filter(user=self.request.user, reply=False).count()
-        context["questions_count"] = Question.objects.get_questions_by_user(self.request.user).count()
-        context["answers_count"] = Answer.objects.filter(user=self.request.user).count()
+        user = self.get_object()
+        context["articles_count"] = Article.objects.get_by_user(user).count()
+        context["news_count"] = News.objects.filter(user=user, reply=False).count()
+        context["questions_count"] = Question.objects.get_questions_by_user(user).count()
+        context["answers_count"] = Answer.objects.filter(user=user).count()
         return context
 
 
@@ -37,7 +38,7 @@ user_detail_view = UserDetailView.as_view()
 class UserArticlesDetailView(UserDetailView):
     def get_context_data(self, **kwargs):
         context = super(UserArticlesDetailView, self).get_context_data()
-        context["articles"] = Article.objects.get_by_user(self.request.user)
+        context["articles"] = Article.objects.get_by_user(self.get_object())
         context["active"] = 'articles'
         return context
 
@@ -46,7 +47,7 @@ class UserArticlesDetailView(UserDetailView):
 class UserNewsDetailView(UserDetailView):
     def get_context_data(self, **kwargs):
         context = super(UserNewsDetailView, self).get_context_data()
-        context["news"] = News.objects.filter(user=self.request.user, reply=False).order_by('-updated_at')
+        context["news"] = News.objects.filter(user=self.get_object(), reply=False).order_by('-updated_at')
         context["active"] = 'news'
         return context
 
@@ -55,7 +56,7 @@ class UserNewsDetailView(UserDetailView):
 class UserQuestionsDetailView(UserDetailView):
     def get_context_data(self, **kwargs):
         context = super(UserQuestionsDetailView, self).get_context_data()
-        context["questions"] = Question.objects.get_questions_by_user(self.request.user)
+        context["questions"] = Question.objects.get_questions_by_user(self.get_object())
         context["active"] = 'questions'
         return context
 
@@ -64,7 +65,7 @@ class UserQuestionsDetailView(UserDetailView):
 class UserAnswersDetailView(UserDetailView):
     def get_context_data(self, **kwargs):
         context = super(UserAnswersDetailView, self).get_context_data()
-        context["answers"] = Answer.objects.filter(user=self.request.user)
+        context["answers"] = Answer.objects.filter(user=self.get_object())
         context["active"] = 'answers'
         return context
 

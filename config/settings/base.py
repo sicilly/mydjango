@@ -353,7 +353,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [f'{env("REDIS_URL",default="redis://192.168.0.104:6379")}/3', ],  # channel layers缓存使用Redis3
+            "hosts": [f'{env("REDIS_URL",default="redis://192.168.0.107:6379")}/3', ],  # channel layers缓存使用Redis3
         },
     },
 }

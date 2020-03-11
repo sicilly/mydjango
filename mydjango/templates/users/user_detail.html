@@ -69,20 +69,20 @@
           <div class="list-group">
             <a href="{% url 'users:user_news' user.username %}"
                class="list-group-item list-group-item-action {% ifequal active 'news'%}active{% endifequal %}">
-              我的新闻动态
+              {% ifequal user.username request.user.username %}我的{% else %}TA的{% endifequal %}新闻动态
               <span class="badge badge-dark badge-pill">{{ news_count }}</span>
             </a>
             <a href="{% url 'users:user_articles' user.username %}"
                class="list-group-item list-group-item-action {% ifequal active 'articles'%}active{% endifequal %}">
-              我的博客文章
+              {% ifequal user.username request.user.username %}我的{% else %}TA的{% endifequal %}博客文章
               <span class="badge badge-dark badge-pill">{{ articles_count }}</span>
             </a>
             <a href="{% url 'users:user_questions' user.username %}" class="list-group-item list-group-item-action {% ifequal active 'questions'%}active{% endifequal %}">
-              我提出的问题
+              {% ifequal user.username request.user.username %}我{% else %}TA{% endifequal %}提出的问题
               <span class="badge badge-dark badge-pill">{{ questions_count }}</span>
             </a>
             <a href="{% url 'users:user_answers' user.username %}" class="list-group-item list-group-item-action {% ifequal active 'answers'%}active{% endifequal %}">
-              我给出的回答
+              {% ifequal user.username request.user.username %}我{% else %}TA{% endifequal %}给出的回答
               <span class="badge badge-dark badge-pill">{{ answers_count }}</span>
             </a>
           </div>
