@@ -115,6 +115,10 @@ LOGIN_REDIRECT_URL = "users:redirect"  # 用户登录以后跳转到哪个页面
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
