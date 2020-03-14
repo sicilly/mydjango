@@ -1,4 +1,4 @@
-{% load static i18n compress thumbnail %}
+{% load static i18n compress thumbnail cache%}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,38 +31,37 @@
   </head>
 
   <body>
-
     <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">可达鸭</a>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item" id="home">
-              <a class="nav-link" href="{% url 'home' %}">首页 <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item" id="about">
-              <a class="nav-link" href="{% url 'about' %}">关于</a>
-            </li>
-            <li class="nav-item" id="news">
-              <a class="nav-link" href="{% url 'news:list' %}">新闻动态</a>
-            </li>
-            <li class="nav-item" id="blogs">
-              <a class="nav-link" href="{% url 'blogs:list' %}">博客文章</a>
-            </li>
-            <li class="nav-item" id="quora">
-              <a class="nav-link" href="{% url 'quora:all-questions' %}">有问有答</a>
-            </li>
-            <li class="nav-item" id="chat">
-              <a class="nav-link" href="{% url 'chat:index' %}">在线畅聊</a>
-            </li>
-            {% if request.user.is_authenticated %}
-
+      {% if request.user.is_authenticated %}
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}">Angel</a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            {% cache 7200 loginnavbar %}
+              <li class="nav-item" id="home">
+                <a class="nav-link" href="{% url 'home' %}">首页 <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item" id="about">
+                <a class="nav-link" href="{% url 'about' %}">关于</a>
+              </li>
+              <li class="nav-item" id="news">
+                <a class="nav-link" href="{% url 'news:list' %}">新闻动态</a>
+              </li>
+              <li class="nav-item" id="blogs">
+                <a class="nav-link" href="{% url 'blogs:list' %}">博客文章</a>
+              </li>
+              <li class="nav-item" id="quora">
+                <a class="nav-link" href="{% url 'quora:all-questions' %}">有问有答</a>
+              </li>
+              <li class="nav-item" id="chat">
+                <a class="nav-link" href="{% url 'chat:index' %}">在线畅聊</a>
+              </li>
+            {% endcache %}
               <li class="nav-item" id="users">
                 {# username 是一个占位符 #}
                 <a class="nav-link" href="{% url 'users:detail' request.user.username %}">
@@ -84,22 +83,58 @@
               <li class="nav-item" id="logout">
                 <a id="sign-up-link" class="nav-link" href="{% url 'account_logout' %}">{% trans "退出" %}</a>
               </li>
-            {% else %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'haystack_search' %}">
+              <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            </form>
+          </div>
+        </nav>
+      {% else %}
+        {% cache 7200 outnavbar%}
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}">Angel</a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item" id="home">
+                <a class="nav-link" href="{% url 'home' %}">首页 <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item" id="about">
+                <a class="nav-link" href="{% url 'about' %}">关于</a>
+              </li>
+              <li class="nav-item" id="news">
+                <a class="nav-link" href="{% url 'news:list' %}">新闻动态</a>
+              </li>
+              <li class="nav-item" id="blogs">
+                <a class="nav-link" href="{% url 'blogs:list' %}">博客文章</a>
+              </li>
+              <li class="nav-item" id="quora">
+                <a class="nav-link" href="{% url 'quora:all-questions' %}">有问有答</a>
+              </li>
+              <li class="nav-item" id="chat">
+                <a class="nav-link" href="{% url 'chat:index' %}">在线畅聊</a>
+              </li>
               <li class="nav-item" id="signup">
                 <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "注册" %}</a>
               </li>
               <li class="nav-item" id="login">
                 <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "登录" %}</a>
               </li>
-            {% endif %}
-
-          </ul>
-          <form class="form-inline my-2 my-lg-0" action="{% url 'haystack_search' %}">
-            <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
-          </form>
-        </div>
-      </nav>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'haystack_search' %}">
+              <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            </form>
+          </div>
+        </nav>
+        {% endcache %}
+      {% endif %}
     </div>
 
     <div class="container">
