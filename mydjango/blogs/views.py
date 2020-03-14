@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django_comments.signals import comment_was_posted
 from mydjango.blogs.models import Article, ArticleCategory
@@ -32,12 +34,13 @@ class DraftListView(ArticleListView):
         return Article.objects.get_drafts()
 
 
+@method_decorator(cache_page(60*60), name='get')
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     """创建文章"""
     model = Article
     form_class = ArticleForm
     template_name_suffix = '_create_form'
-    template_name = "blogs/../templates/quora/article_create_form.html"
+    template_name = "blogs/article_create_form.html"
 
     # 表单验证
     def form_valid(self, form):
