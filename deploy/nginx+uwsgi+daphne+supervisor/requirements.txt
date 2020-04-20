@@ -3,7 +3,7 @@ redis==3.2.1
 celery==4.3.0rc3
 django-celery-email==2.0.1
 daphne==2.2.5
-django==2.1.7
+django==2.2.10
 django-redis==4.10.0
 django-allauth==0.39.1
 django-environ==0.4.5
@@ -18,7 +18,7 @@ django-taggit==1.1.0
 channels-redis==2.3.3
 awesome-slugify==1.6.5
 argon2-cffi==19.1.0
-pillow==5.4.1
+pillow==6.2.2
 python3-openid==3.1.0
 requests-oauthlib==1.2.0
 requests==2.21.0
